@@ -1,13 +1,27 @@
 import { Container, Form, Button } from "react-bootstrap";
 import history from "../history";
 
-const CreateLobbyPage = ({ username, setUsername, setGameLobbyID, socket }) => {
+const CreateLobbyPage = ({ username, setUsername, setGameLobbyID, client }) => {
+  const createAndJoinRoom = async () => {
+    try {
+      // request the server to create a room
+      const room = await client.create("drawingRoom");
+      console.log(`Created room "${room.id}" successfully.`);
+
+      // join the created room, save the roomID, redirect to GameLobbyPage
+      const joinedRoom = await client.joinById(room.id);
+      console.log(`Joined room "${joinedRoom.id}" successfully.`);
+      setGameLobbyID(joinedRoom.id);
+      history.push("/gameLobby");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleSubmit = (e) => {
-    // fill form -> press submit -> socket.io creates user -> socket.io creates room and joins user to it -> callback to client (via custom socket event) -> redirect to gamelobby page
     e.preventDefault();
 
-    // setGameLobbyID(roomID);
-    // history.push("/gameLobby");
+    createAndJoinRoom();
   };
 
   return (

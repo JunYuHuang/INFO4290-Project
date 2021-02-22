@@ -11,7 +11,7 @@ const GameLobbyPage = ({
   setUsername,
   gameLobbyID,
   setGameLobbyID,
-  // socket,
+  client,
 }) => {
   // state
   const [message, setMessage] = useState("");

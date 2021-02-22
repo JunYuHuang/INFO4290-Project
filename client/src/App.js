@@ -8,7 +8,7 @@ import JoinGameLobbyPage from "./pages/JoinGameLobby";
 import * as Colyseus from "colyseus.js";
 
 // connect to the game server
-const SOCKET_SERVER_URL = "ws://localhost:3001/";
+const SOCKET_SERVER_URL = "ws://localhost:2567/";
 let client = new Colyseus.Client(SOCKET_SERVER_URL);
 
 const App = () => {
@@ -29,7 +29,7 @@ const App = () => {
                 setUsername={setUsername}
                 gameLobbyID={gameLobbyID}
                 setGameLobbyID={setGameLobbyID}
-                colyseusClient={client}
+                client={client}
               />
             )}
           </Route> */}
@@ -39,7 +39,7 @@ const App = () => {
               setUsername={setUsername}
               gameLobbyID={gameLobbyID}
               setGameLobbyID={setGameLobbyID}
-              colyseusClient={client}
+              client={client}
             />
           </Route>
           <Route path="/createGameLobby">
@@ -47,7 +47,7 @@ const App = () => {
               username={username}
               setUsername={setUsername}
               setGameLobbyID={setGameLobbyID}
-              colyseusClient={client}
+              client={client}
             />
           </Route>
           <Route path="/joinGameLobby">
@@ -56,7 +56,7 @@ const App = () => {
               setUsername={setUsername}
               gameLobbyID={gameLobbyID}
               setGameLobbyID={setGameLobbyID}
-              colyseusClient={client}
+              client={client}
             />
           </Route>
           <Route path="/">
