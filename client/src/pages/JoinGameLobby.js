@@ -1,4 +1,5 @@
-import { Container, Form, Button } from "react-bootstrap";
+import { useState } from "react";
+import { Container, Form, Button, Alert } from "react-bootstrap";
 import history from "../history";
 
 const JoinGamePage = ({
@@ -6,31 +7,44 @@ const JoinGamePage = ({
   setUsername,
   gameLobbyID,
   setGameLobbyID,
-  socket,
+  client,
 }) => {
+  const [alertVisibility, setAlertVisibility] = useState(false);
+
+  const flashAlert = () => {
+    setAlertVisibility(true);
+    setTimeout(() => {
+      setAlertVisibility(false);
+    }, 5000);
+  };
+
+  const joinRoom = async () => {
+    try {
+      // join a room
+      const room = await client.joinById(gameLobbyID);
+      console.log(`Created and joined room "${room.id}" successfully.`);
+      // redirect to GameLobbyPage
+      history.push("/gameLobby");
+    } catch (error) {
+      console.log(`Failed to join the room: ${error}`);
+      flashAlert();
+    }
+  };
+
   const handleSubmit = (e) => {
-    // fill form -> press submit -> socket.io creates user -> socket.io joins user to room -> callback to client (via custom socket event) -> redirect to gamelobby page
     e.preventDefault();
-
-    // socket.emit("CREATE_USER", username);
-
-    // socket.on("USER_CREATED", () => {
-    //   // testing
-    //   console.log(`Submitted Username: ${username}`);
-    //   console.log(`Submitted Lobby ID: ${gameLobbyID}`);
-
-    //   socket.emit("JOIN_ROOM", { username, roomID: gameLobbyID });
-    // });
-
-    // socket.on("ROOM_JOINED", () => {
-    //   history.push("/gameLobby");
-    // });
+    joinRoom();
   };
 
   return (
     <Container className="form-container form-container--homePage">
       <Form className="form form--homePage" onSubmit={(e) => handleSubmit(e)}>
         <h1 className="font-weight-hold text-center mb-4">Guess My Sketch</h1>
+        {/* alert */}
+        <Alert show={alertVisibility} variant="danger">
+          <strong>Failed to join lobby {gameLobbyID}</strong>
+        </Alert>
+        {/* alert */}
         <Form.Group controlId="formUsername">
           <Form.Label className="text-secondary">Your Name</Form.Label>
           <Form.Control

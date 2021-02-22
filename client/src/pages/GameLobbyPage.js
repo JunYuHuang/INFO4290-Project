@@ -68,7 +68,11 @@ const GameLobbyPage = ({
           <span className="text-primary">{gameLobbyID}</span>
         </h1>
       </Row>
-      <TopMenuBar socket="ass" username={username} gameLobbyID={gameLobbyID} />
+      <TopMenuBar
+        client={client}
+        username={username}
+        gameLobbyID={gameLobbyID}
+      />
       <Row className="justify-content-between mb-4">
         <Col lg={3} className="d-flex flex-column justify-content-between">
           <ListGroup>
@@ -77,14 +81,14 @@ const GameLobbyPage = ({
         </Col>
         <Col lg={6}>
           <DrawingBoard
-            socket="ass"
+            client={client}
             username={username}
             gameLobbyID={gameLobbyID}
           />
         </Col>
         <Col lg={3} className="chat-container-wrapper">
           <TextChat
-            socket="ass"
+            client={client}
             username={username}
             gameLobbyID={gameLobbyID}
             messageList={messageList}

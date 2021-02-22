@@ -55,7 +55,7 @@ export class DrawingRoom extends Room {
 
     this.broadcast(MESSAGE_SENT, messageContent);
 
-    console.log(`Client "${client.sessionId}" joined the DrawingRoom "${this.roomId}",`);
+    console.log(`Client "${client.sessionId}" joined the DrawingRoom "${this.roomId}".`);
   }
 
   onLeave (client: Client, consented: boolean) {
@@ -68,7 +68,7 @@ export class DrawingRoom extends Room {
 
     this.broadcast(MESSAGE_SENT, messageContent);
 
-    console.log(`Client "${client.sessionId}" left the DrawingRoom "${this.roomId}",`);
+    console.log(`Client "${client.sessionId}" left the DrawingRoom "${this.roomId}".`);
   }
 
   onDispose() {

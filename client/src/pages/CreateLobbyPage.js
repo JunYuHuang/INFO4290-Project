@@ -12,7 +12,7 @@ const CreateLobbyPage = ({ username, setUsername, setGameLobbyID, client }) => {
       // redirect to GameLobbyPage
       history.push("/gameLobby");
     } catch (error) {
-      console.log(error);
+      console.log(`Failed to create and join a room: ${error}`);
     }
   };
 
