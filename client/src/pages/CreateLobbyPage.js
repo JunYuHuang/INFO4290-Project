@@ -6,12 +6,10 @@ const CreateLobbyPage = ({ username, setUsername, setGameLobbyID, client }) => {
     try {
       // request the server to create a room
       const room = await client.create("drawingRoom");
-      console.log(`Created room "${room.id}" successfully.`);
-
-      // join the created room, save the roomID, redirect to GameLobbyPage
-      const joinedRoom = await client.joinById(room.id);
-      console.log(`Joined room "${joinedRoom.id}" successfully.`);
-      setGameLobbyID(joinedRoom.id);
+      console.log(`Created and joined room "${room.id}" successfully.`);
+      // save the roomID
+      setGameLobbyID(room.id);
+      // redirect to GameLobbyPage
       history.push("/gameLobby");
     } catch (error) {
       console.log(error);
@@ -20,7 +18,6 @@ const CreateLobbyPage = ({ username, setUsername, setGameLobbyID, client }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     createAndJoinRoom();
   };
 
