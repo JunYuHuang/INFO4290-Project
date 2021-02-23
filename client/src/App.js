@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Router, Switch, Route, Redirect } from "react-router-dom";
 import history from "./history";
-import HomePage from "./pages/HomePage";
-import GameLobbyPage from "./pages/GameLobbyPage";
-import CreateGameLobbyPage from "./pages/CreateLobbyPage";
-import JoinGameLobbyPage from "./pages/JoinGameLobby";
+import Home from "./pages/Home";
+import Lobby from "./pages/Lobby";
+import CreateLobby from "./pages/CreateLobby";
+import JoinLobby from "./pages/JoinLobby";
 import * as Colyseus from "colyseus.js";
 
 // connect to the game server
@@ -13,8 +13,15 @@ let client = new Colyseus.Client(SOCKET_SERVER_URL);
 
 const App = () => {
   // state
-  const [username, setUsername] = useState("");
-  const [gameLobbyID, setGameLobbyID] = useState("");
+  const [user, setUser] = useState({
+    sessionID: "",
+    displayName: "",
+    authenticated: false,
+    lobbyID: "",
+    points: 0,
+  });
+
+  const [clientRoom, setClientRoom] = useState({});
 
   return (
     <Router history={history}>
@@ -34,33 +41,32 @@ const App = () => {
             )}
           </Route> */}
           <Route path="/gameLobby">
-            <GameLobbyPage
-              username={username}
-              setUsername={setUsername}
-              gameLobbyID={gameLobbyID}
-              setGameLobbyID={setGameLobbyID}
+            <Lobby
+              user={user}
+              setUser={setUser}
+              clientRoom={clientRoom}
+              setClientRoom={setClientRoom}
               client={client}
             />
           </Route>
           <Route path="/createGameLobby">
-            <CreateGameLobbyPage
-              username={username}
-              setUsername={setUsername}
-              setGameLobbyID={setGameLobbyID}
+            <CreateLobby
+              user={user}
+              setUser={setUser}
+              setClientRoom={setClientRoom}
               client={client}
             />
           </Route>
           <Route path="/joinGameLobby">
-            <JoinGameLobbyPage
-              username={username}
-              setUsername={setUsername}
-              gameLobbyID={gameLobbyID}
-              setGameLobbyID={setGameLobbyID}
+            <JoinLobby
+              user={user}
+              setUser={setUser}
+              setClientRoom={setClientRoom}
               client={client}
             />
           </Route>
           <Route path="/">
-            <HomePage />
+            <Home />
           </Route>
         </Switch>
       </div>

@@ -1,22 +1,17 @@
 import { Row, Col, Button } from "react-bootstrap";
 import history from "../history";
 
-const TopMenuBar = ({ client, username, gameLobbyID }) => {
-  // TODO - complete leave room functionality with room.leave()
-  const leaveRoom = async () => {
+const TopMenuBar = ({ user, clientRoom, client }) => {
+  const handleLeaveButton = async () => {
     try {
       // leave a room
-      // const room = await client.joinById(gameLobbyID);
-      console.log(`Left room "" successfully.`);
+      clientRoom.leave();
+      console.log(`Left room "${user.lobbyID}" successfully.`);
       // redirect to home page
       history.push("/");
     } catch (error) {
       console.log(`Failed to leave the room: ${error}`);
     }
-  };
-
-  const handleLeaveButton = () => {
-    // leaveRoom();
   };
 
   return (

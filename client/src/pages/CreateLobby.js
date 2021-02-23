@@ -1,14 +1,17 @@
 import { Container, Form, Button } from "react-bootstrap";
 import history from "../history";
 
-const CreateLobbyPage = ({ username, setUsername, setGameLobbyID, client }) => {
+const CreateLobby = ({ user, setUser, setClientRoom, client }) => {
   const createAndJoinRoom = async () => {
     try {
       // request the server to create a room
       const room = await client.create("drawingRoom");
       console.log(`Created and joined room "${room.id}" successfully.`);
-      // save the roomID
-      setGameLobbyID(room.id);
+
+      // save the local state
+      setUser({ ...user, sessionID: room.sessionId, lobbyID: room.id });
+      setClientRoom(room);
+
       // redirect to GameLobbyPage
       history.push("/gameLobby");
     } catch (error) {
@@ -32,7 +35,7 @@ const CreateLobbyPage = ({ username, setUsername, setGameLobbyID, client }) => {
             type="text"
             placeholder="Enter your name"
             required
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) => setUser({ ...user, displayName: e.target.value })}
           />
         </Form.Group>
         <Form.Group>
@@ -49,4 +52,4 @@ const CreateLobbyPage = ({ username, setUsername, setGameLobbyID, client }) => {
   );
 };
 
-export default CreateLobbyPage;
+export default CreateLobby;

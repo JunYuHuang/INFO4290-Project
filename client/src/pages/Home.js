@@ -1,7 +1,7 @@
 import { Container, Form, Button } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 
-const HomePage = (props) => {
+const Home = (props) => {
   // handle form submit
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -12,16 +12,16 @@ const HomePage = (props) => {
       <Form className="form form--homePage" onSubmit={handleSubmit}>
         <h1 className="font-weight-hold text-center mb-4">Guess My Sketch</h1>
         <Form.Group>
-          <LinkContainer to="/createGameLobby">
+          <LinkContainer to="/joinGameLobby">
             <Button variant="outline-primary" className="btn-lg btn-block">
-              Create a Lobby
+              Join a Lobby
             </Button>
           </LinkContainer>
         </Form.Group>
         <Form.Group>
-          <LinkContainer to="/joinGameLobby">
+          <LinkContainer to="/createGameLobby">
             <Button variant="primary" className="btn-lg btn-block">
-              Join a Lobby
+              Create a Lobby
             </Button>
           </LinkContainer>
         </Form.Group>
@@ -30,4 +30,4 @@ const HomePage = (props) => {
   );
 };
 
-export default HomePage;
+export default Home;

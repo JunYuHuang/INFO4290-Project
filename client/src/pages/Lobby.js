@@ -6,17 +6,11 @@ import TopMenuBar from "../components/TopMenuBar";
 import TextChat from "../components/TextChat";
 import DrawingBoard from "../components/DrawingBoard";
 
-const GameLobbyPage = ({
-  username,
-  setUsername,
-  gameLobbyID,
-  setGameLobbyID,
-  client,
-}) => {
+const Lobby = ({ user, setUser, clientRoom, setClientRoom, client }) => {
   // state
   const [message, setMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
-  const [usersInRoom, setUsersInRoom] = useState([{ name: username }]); // initialized value so page doesn't crash
+  const [usersInRoom, setUsersInRoom] = useState([{ name: user.username }]); // initialized value so page doesn't crash
 
   // // get and update players in a room
   // useEffect(() => {
@@ -65,14 +59,10 @@ const GameLobbyPage = ({
       <Row className="d-flex flex-column">
         <h1 className="col col-lg-12 mb-4 text-center">
           Guess My Sketch - Lobby ID&nbsp;
-          <span className="text-primary">{gameLobbyID}</span>
+          <span className="text-primary">{user.lobbyID}</span>
         </h1>
       </Row>
-      <TopMenuBar
-        client={client}
-        username={username}
-        gameLobbyID={gameLobbyID}
-      />
+      <TopMenuBar user={user} clientRoom={clientRoom} client={client} />
       <Row className="justify-content-between mb-4">
         <Col lg={3} className="d-flex flex-column justify-content-between">
           <ListGroup>
@@ -82,15 +72,15 @@ const GameLobbyPage = ({
         <Col lg={6}>
           <DrawingBoard
             client={client}
-            username={username}
-            gameLobbyID={gameLobbyID}
+            username={user.username}
+            gameLobbyID={user.lobbyID}
           />
         </Col>
         <Col lg={3} className="chat-container-wrapper">
           <TextChat
             client={client}
-            username={username}
-            gameLobbyID={gameLobbyID}
+            username={user.username}
+            gameLobbyID={user.lobbyID}
             messageList={messageList}
             setMessageList={setMessageList}
             message={message}
@@ -102,4 +92,4 @@ const GameLobbyPage = ({
   );
 };
 
-export default GameLobbyPage;
+export default Lobby;

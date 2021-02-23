@@ -2,13 +2,7 @@ import { useState } from "react";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import history from "../history";
 
-const JoinGamePage = ({
-  username,
-  setUsername,
-  gameLobbyID,
-  setGameLobbyID,
-  client,
-}) => {
+const JoinLobby = ({ user, setUser, setClientRoom, client }) => {
   const [alertVisibility, setAlertVisibility] = useState(false);
 
   const flashAlert = () => {
@@ -21,8 +15,13 @@ const JoinGamePage = ({
   const joinRoom = async () => {
     try {
       // join a room
-      const room = await client.joinById(gameLobbyID);
+      const room = await client.joinById(user.lobbyID);
       console.log(`Created and joined room "${room.id}" successfully.`);
+
+      // save the local state
+      setUser({ ...user, sessionID: room.sessionId, lobbyID: room.id });
+      setClientRoom(room);
+
       // redirect to GameLobbyPage
       history.push("/gameLobby");
     } catch (error) {
@@ -42,7 +41,7 @@ const JoinGamePage = ({
         <h1 className="font-weight-hold text-center mb-4">Guess My Sketch</h1>
         {/* alert */}
         <Alert show={alertVisibility} variant="danger">
-          <strong>Failed to join lobby {gameLobbyID}</strong>
+          <strong>Failed to join lobby {user.lobbyID}</strong>
         </Alert>
         {/* alert */}
         <Form.Group controlId="formUsername">
@@ -52,7 +51,7 @@ const JoinGamePage = ({
             type="text"
             placeholder="Enter your name"
             required
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) => setUser({ ...user, displayName: e.target.value })}
           />
         </Form.Group>
         <Form.Group controlId="formLobbyId">
@@ -62,7 +61,7 @@ const JoinGamePage = ({
             type="text"
             placeholder="Enter game lobby ID"
             required
-            onChange={(e) => setGameLobbyID(e.target.value)}
+            onChange={(e) => setUser({ ...user, lobbyID: e.target.value })}
           />
         </Form.Group>
         <Form.Group>
@@ -79,4 +78,4 @@ const JoinGamePage = ({
   );
 };
 
-export default JoinGamePage;
+export default JoinLobby;
