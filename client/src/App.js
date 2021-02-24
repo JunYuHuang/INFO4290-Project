@@ -26,27 +26,18 @@ const App = () => {
     <Router history={history}>
       <div className="react-app-container">
         <Switch>
-          {/* <Route path="/gameLobby">
-            {username === "" ? (
+          <Route path="/lobby">
+            {user.sessionID === "" ? (
               <Redirect to="/" />
             ) : (
-              <GameLobbyPage
-                username={username}
-                setUsername={setUsername}
-                gameLobbyID={gameLobbyID}
-                setGameLobbyID={setGameLobbyID}
+              <Lobby
+                user={user}
+                setUser={setUser}
+                clientRoom={clientRoom}
+                setClientRoom={setClientRoom}
                 client={client}
               />
             )}
-          </Route> */}
-          <Route path="/gameLobby">
-            <Lobby
-              user={user}
-              setUser={setUser}
-              clientRoom={clientRoom}
-              setClientRoom={setClientRoom}
-              client={client}
-            />
           </Route>
           <Route path="/">
             <Home

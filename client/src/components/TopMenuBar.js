@@ -1,12 +1,13 @@
 import { Row, Col, Button } from "react-bootstrap";
 import history from "../history";
 
-const TopMenuBar = ({ user, clientRoom, client }) => {
+const TopMenuBar = ({ user, setUser, clientRoom, client }) => {
   const handleLeaveButton = async () => {
     try {
       // leave a room
       clientRoom.leave();
       console.log(`Left room "${user.lobbyID}" successfully.`);
+      setUser({ ...user, sessionID: "" });
       // redirect to home page
       history.push("/");
     } catch (error) {

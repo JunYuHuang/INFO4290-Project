@@ -45,8 +45,8 @@ const Home = ({ user, setUser, setClientRoom, client, faker }) => {
       // close the modal
       setModalVisibility(false);
 
-      // redirect to GameLobbyPage
-      history.push("/gameLobby");
+      // redirect to lobby
+      history.push("/lobby");
     } catch (error) {
       console.log(`Failed to join the room: ${error}`);
       flashAlert();
@@ -72,8 +72,8 @@ const Home = ({ user, setUser, setClientRoom, client, faker }) => {
       }
       setClientRoom(room);
 
-      // redirect to GameLobbyPage
-      history.push("/gameLobby");
+      // redirect to Lobby
+      history.push("/lobby");
     } catch (error) {
       console.log(`Failed to create and join a room: ${error}`);
     }

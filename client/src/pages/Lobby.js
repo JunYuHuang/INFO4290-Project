@@ -62,7 +62,12 @@ const Lobby = ({ user, setUser, clientRoom, setClientRoom, client }) => {
           <span className="text-primary">{user.lobbyID}</span>
         </h1>
       </Row>
-      <TopMenuBar user={user} clientRoom={clientRoom} client={client} />
+      <TopMenuBar
+        user={user}
+        setUser={setUser}
+        clientRoom={clientRoom}
+        client={client}
+      />
       <Row className="justify-content-between mb-4">
         <Col lg={3} className="d-flex flex-column justify-content-between">
           <ListGroup>
