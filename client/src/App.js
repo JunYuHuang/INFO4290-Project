@@ -3,9 +3,8 @@ import { Router, Switch, Route, Redirect } from "react-router-dom";
 import history from "./history";
 import Home from "./pages/Home";
 import Lobby from "./pages/Lobby";
-import CreateLobby from "./pages/CreateLobby";
-import JoinLobby from "./pages/JoinLobby";
 import * as Colyseus from "colyseus.js";
+const faker = require("faker");
 
 // connect to the game server
 const SOCKET_SERVER_URL = "ws://localhost:2567/";
@@ -49,24 +48,14 @@ const App = () => {
               client={client}
             />
           </Route>
-          <Route path="/createGameLobby">
-            <CreateLobby
-              user={user}
-              setUser={setUser}
-              setClientRoom={setClientRoom}
-              client={client}
-            />
-          </Route>
-          <Route path="/joinGameLobby">
-            <JoinLobby
-              user={user}
-              setUser={setUser}
-              setClientRoom={setClientRoom}
-              client={client}
-            />
-          </Route>
           <Route path="/">
-            <Home />
+            <Home
+              user={user}
+              setUser={setUser}
+              setClientRoom={setClientRoom}
+              client={client}
+              faker={faker}
+            />
           </Route>
         </Switch>
       </div>
