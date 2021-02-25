@@ -18,6 +18,7 @@ const App = () => {
     authenticated: false,
     lobbyID: "",
     points: 0,
+    isDrawer: false,
   });
 
   const [clientRoom, setClientRoom] = useState({});

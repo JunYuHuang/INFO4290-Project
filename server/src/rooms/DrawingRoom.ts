@@ -8,23 +8,28 @@ import { DrawingRoomState } from "./schema/DrawingRoomState";
 // TODO - put them into a separate js file
 const SEND_MESSAGE = "SEND_MESSAGE";
 const MESSAGE_SENT = "MESSAGE_SENT";
+const ADD_USER = "ADD_USER";
+const USER_ADDED = "USER_ADDED";
+const JOIN_ROOM = "JOIN_ROOM";
+const ROOM_JOINED = "ROOM_JOINED";
+const DELETE_USER = "DELETE_USER";
+const USER_DELETED = "USER_DELETED";
 const SEND_DRAWING = "SEND_DRAWING";
 const DRAWING_SENT = "DRAWING_SENT";
 
 // bot variables
 const BOT_NAME = "Server Bot";
 
-export class DrawingRoom extends Room {
+export class DrawingRoom extends Room<DrawingRoomState> {
   // this room supports only 16 clients connected
   maxClients = 16;
 
   onCreate (options: any) {
-    // boilerplate code below
-    //
-    // this.setState(new DrawingRoomState());
-
+    // initialize state
+    this.setState(new DrawingRoomState());
     console.log(`DrawingRoom "${this.roomId}" created!`);
 
+    // broadcast messages sent by each client in the room
     this.onMessage(SEND_MESSAGE, (client, messagePackage) => {
       let { senderID, senderDisplayName, messageText } = messagePackage;
       this.broadcast(MESSAGE_SENT, messagePackage);
@@ -32,26 +37,43 @@ export class DrawingRoom extends Room {
     });
   }
 
+  // TODO - figure out how to add user with initial join
   onJoin (client: Client, options: any) {
-    let messagePackage = {
-      senderID: this.roomId,
-      senderDisplayName: BOT_NAME,
-      messageText: `${client.sessionId} joined the room.`
-    };
+    // add the player to the room state
+    this.state.addUser(client.sessionId);
 
-    this.broadcast(MESSAGE_SENT, messagePackage);
+    // add additional user info to the state
+    this.onMessage(ADD_USER, (client, userInfo) => {
+      let { sessionID, displayName } = userInfo;
+      this.state.getUser(client.sessionId).setSessionID(sessionID);
+      this.state.getUser(client.sessionId).setDisplayName(displayName);
+
+      // tell client when user has been added
+      // client.send(USER_ADDED);
+
+      // announce to all clients in the room that a player has joined
+      let messagePackage = {
+        senderID: this.roomId,
+        senderDisplayName: BOT_NAME,
+        messageText: `${this.state.getUser(client.sessionId).getDisplayName()} joined the room.`
+      };
+      this.broadcast(MESSAGE_SENT, messagePackage);
+    });
 
     console.log(`Client "${client.sessionId}" joined the DrawingRoom "${this.roomId}".`);
   }
 
   onLeave (client: Client, consented: boolean) {
+    // announce to all clients in the room that a player has left
     let messagePackage = {
       senderDisplayName: BOT_NAME,
       senderID: this.roomId,
-      messageText: `${client.sessionId} left the room.`
+      messageText: `${this.state.getUser(client.sessionId).getDisplayName()} left the room.`
     };
-
     this.broadcast(MESSAGE_SENT, messagePackage);
+
+    // remove the player's info to the room state
+    this.state.removeUser(client.sessionId);
 
     console.log(`Client "${client.sessionId}" left the DrawingRoom "${this.roomId}".`);
   }

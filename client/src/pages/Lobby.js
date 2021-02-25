@@ -10,18 +10,22 @@ const Lobby = ({ user, setUser, clientRoom, setClientRoom, client }) => {
   // state
   const [message, setMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
-  const [usersInRoom, setUsersInRoom] = useState([{ name: user.displayName }]); // initialized value so page doesn't crash
+  // const [usersInRoom, setUsersInRoom] = useState([{ name: user.displayName }]);
 
-  // get user messages and game announcements
   useEffect(() => {
+    // send user info to room backend to update server state
+    let userInfo = {
+      sessionID: user.sessionID,
+      displayName: user.displayName,
+    };
+    clientRoom.send("ADD_USER", userInfo);
+
+    // get user messages and game announcements
     clientRoom.onMessage("MESSAGE_SENT", (messagePackage) => {
       setMessageList((previousMessageList) => {
         return [...previousMessageList, messagePackage];
       });
     });
-
-    // test
-    console.log("listening for messages");
   }, []);
 
   return (
