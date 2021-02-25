@@ -13,6 +13,17 @@ export class DrawingRoomState extends Schema {
     return this.users.get(sessionID);
   }
 
+  getAllUsers(): Object[] {
+    let usersArray = Array.from(this.users, ([key, value]) => ({
+      sessionID: key,
+      displayName: value.getDisplayName(),
+      points: value.getPoints(),
+      isDrawer: value.getIsDrawer()
+    }));
+
+    return usersArray;
+  }
+
   removeUser(sessionID: string) {
     this.users.delete(sessionID);
   }

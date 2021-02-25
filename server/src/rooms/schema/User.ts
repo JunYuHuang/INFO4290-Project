@@ -1,8 +1,6 @@
 import { Schema, type } from "@colyseus/schema";
 
 export class User extends Schema {
-  private sessionID: string = "";
-
   private displayName: string = "";
 
   @type("number")
@@ -11,21 +9,9 @@ export class User extends Schema {
   @type("boolean")
   private isDrawer: boolean = false;
 
-  constructor(sessionID?: string, displayName?: string, points?: number, isDrawer?: boolean) {
+  constructor() { 
     super();
-    this.sessionID = sessionID;
-    this.displayName = displayName;
-    this.points = points;
-    this.isDrawer = isDrawer;
-  }
-
-  getSessionID() {
-    return this.sessionID;
-  }
-
-  setSessionID(sessionID: string) {
-    this.sessionID = sessionID;
-  }
+  };
 
   getDisplayName() {
     return this.displayName;

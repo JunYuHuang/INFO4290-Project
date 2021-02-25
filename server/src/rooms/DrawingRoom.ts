@@ -16,11 +16,21 @@ const DELETE_USER = "DELETE_USER";
 const USER_DELETED = "USER_DELETED";
 const SEND_DRAWING = "SEND_DRAWING";
 const DRAWING_SENT = "DRAWING_SENT";
+const GET_USERS_IN_ROOM = "GET_USERS_IN_ROOM";
+const USERS_IN_ROOM_UPDATED = "USERS_IN_ROOM_UPDATED";
 
 // bot variables
 const BOT_NAME = "Server Bot";
 
 export class DrawingRoom extends Room<DrawingRoomState> {
+  //
+  // CUSTOMER HELPER METHODS
+  //
+
+  //
+  // ROOM LIFECYCLE METHODS
+  //
+
   // this room supports only 16 clients connected
   maxClients = 16;
 
@@ -35,9 +45,11 @@ export class DrawingRoom extends Room<DrawingRoomState> {
       this.broadcast(MESSAGE_SENT, messagePackage);
       console.log(`Client "${client.sessionId}" (${senderDisplayName}) in the DrawingRoom "${this.roomId}" sent the chat message "${messageText}".`);
     });
+    
+    // TODO: send new list of users to client
+    // code
   }
 
-  // TODO - figure out how to add user with initial join
   onJoin (client: Client, options: any) {
     // add the player to the room state
     this.state.addUser(client.sessionId);
@@ -45,11 +57,8 @@ export class DrawingRoom extends Room<DrawingRoomState> {
     // add additional user info to the state
     this.onMessage(ADD_USER, (client, userInfo) => {
       let { sessionID, displayName } = userInfo;
-      this.state.getUser(client.sessionId).setSessionID(sessionID);
+      // this.state.getUser(client.sessionId).setSessionID(sessionID);
       this.state.getUser(client.sessionId).setDisplayName(displayName);
-
-      // tell client when user has been added
-      // client.send(USER_ADDED);
 
       // announce to all clients in the room that a player has joined
       let messagePackage = {
@@ -58,6 +67,10 @@ export class DrawingRoom extends Room<DrawingRoomState> {
         messageText: `${this.state.getUser(client.sessionId).getDisplayName()} joined the room.`
       };
       this.broadcast(MESSAGE_SENT, messagePackage);
+
+      // TODO: send new list of users to client
+      let updatedLobbyUsers = this.state.getAllUsers();
+      this.broadcast(USERS_IN_ROOM_UPDATED, updatedLobbyUsers);
     });
 
     console.log(`Client "${client.sessionId}" joined the DrawingRoom "${this.roomId}".`);
@@ -74,6 +87,10 @@ export class DrawingRoom extends Room<DrawingRoomState> {
 
     // remove the player's info to the room state
     this.state.removeUser(client.sessionId);
+
+    // TODO: send new list of users to client
+    let updatedLobbyUsers = this.state.getAllUsers();
+    this.broadcast(USERS_IN_ROOM_UPDATED, updatedLobbyUsers);
 
     console.log(`Client "${client.sessionId}" left the DrawingRoom "${this.roomId}".`);
   }

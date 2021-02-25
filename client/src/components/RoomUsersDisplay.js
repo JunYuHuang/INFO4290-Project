@@ -37,9 +37,11 @@ const RoomUsersDisplay = ({ usersInRoom, maxUsersShown }) => {
                 {/* <div className="userCardRank">#1</div> */}
                 <div className="userCardNameAndPoints">
                   <div className="font-weight-bold text-truncate">
-                    {userInRoom.name}
+                    {userInRoom.displayName}
                   </div>
-                  {/* <div className="text-truncate">Points: 1337</div> */}
+                  <div className="text-truncate">
+                    Points: {userInRoom.points}
+                  </div>
                 </div>
               </div>
               {/* <div className="current-drawer-indicator d-flex flex-column justify-content-start align-items-end">

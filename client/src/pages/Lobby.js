@@ -10,7 +10,9 @@ const Lobby = ({ user, setUser, clientRoom, setClientRoom, client }) => {
   // state
   const [message, setMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
-  // const [usersInRoom, setUsersInRoom] = useState([{ name: user.displayName }]);
+  const [lobbyUsers, setLobbyUsers] = useState([
+    { displayName: "TestUser", points: -99 },
+  ]);
 
   useEffect(() => {
     // send user info to room backend to update server state
@@ -25,6 +27,11 @@ const Lobby = ({ user, setUser, clientRoom, setClientRoom, client }) => {
       setMessageList((previousMessageList) => {
         return [...previousMessageList, messagePackage];
       });
+    });
+
+    // get updated list of users whenever some property (e.g. points) of a user changes or if a user joins or leaves the room
+    clientRoom.onMessage("USERS_IN_ROOM_UPDATED", (updatedLobbyUsers) => {
+      setLobbyUsers(updatedLobbyUsers);
     });
   }, []);
 
@@ -45,7 +52,7 @@ const Lobby = ({ user, setUser, clientRoom, setClientRoom, client }) => {
       <Row className="justify-content-between mb-4">
         <Col lg={3} className="d-flex flex-column justify-content-between">
           <ListGroup>
-            {/* <RoomUsersDisplay usersInRoom={usersInRoom} maxUsersShown={5} /> */}
+            <RoomUsersDisplay usersInRoom={lobbyUsers} maxUsersShown={5} />
           </ListGroup>
         </Col>
         <Col lg={6}>
