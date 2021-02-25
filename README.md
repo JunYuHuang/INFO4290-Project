@@ -4,7 +4,7 @@
 
 Guess My Sketch is the course project for the class INFO 4290: Integration Project II.
 
-This is an online, multiplayer web application made with React, Node, and Socket.IO.
+This is an online, multiplayer web application made with React, Node, and Colyseus.
 
 SVGs graphics from the [Ionicons icon library](https://ionicons.com/) were used.
 
@@ -39,5 +39,3 @@ SVGs graphics from the [Ionicons icon library](https://ionicons.com/) were used.
 5. Select the `Git Bash Here` option to open a Git Bash terminal there.
 6. Type `npm start` and hit [Enter] to start the React client app.
 7. Shortly after, the app should automatically open in a new tab or window of your default web browser at the URL `localhost:3000`.
-
-## DADADA

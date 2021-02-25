@@ -10,49 +10,19 @@ const Lobby = ({ user, setUser, clientRoom, setClientRoom, client }) => {
   // state
   const [message, setMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
-  const [usersInRoom, setUsersInRoom] = useState([{ name: user.username }]); // initialized value so page doesn't crash
+  const [usersInRoom, setUsersInRoom] = useState([{ name: user.displayName }]); // initialized value so page doesn't crash
 
-  // // get and update players in a room
-  // useEffect(() => {
-  //   // if not used, won't sync chat messages properly for all players in room
-  //   socket.emit("GET_USERS_IN_ROOM", { username, roomID: gameLobbyID });
-  //   console.log("request for updated list of users in room");
-  //   console.log(`${usersInRoom.length} current users in room:`);
-  //   console.log(usersInRoom);
-  // }, []);
+  // get user messages and game announcements
+  useEffect(() => {
+    clientRoom.onMessage("MESSAGE_SENT", (messagePackage) => {
+      setMessageList((previousMessageList) => {
+        return [...previousMessageList, messagePackage];
+      });
+    });
 
-  // useEffect(() => {
-  //   socket.on("USERS_IN_ROOM_UPDATED", (usersInRoomFromServer) => {
-  //     setUsersInRoom(usersInRoomFromServer);
-  //     console.log("retrieved updated list of users in room");
-  //     console.log(`${usersInRoom.length} current users in room:`);
-  //     console.log(usersInRoom);
-  //   });
-  // });
-
-  // // get user messages and game announcements
-  // useEffect(() => {
-  //   socket.on("MESSAGE_SENT", (messageContent) => {
-  //     setMessageList([...messageList, messageContent]);
-  //   });
-
-  //   socket.on("GAME_ANNOUNCEMENT", (messageContent) => {
-  //     setMessageList([...messageList, messageContent]);
-  //   });
-
-  //   // has memory leak problem related to async issues i think
-  //   socket.on("ROOM_LEFT", () => {
-  //     history.push("/");
-  //     // hacky fix that resolves client issue of keeping old username and lobbyID if socket is manually disconnected and reconnected
-  //     // if socket is disconnected and reconnected manually, client will create increment the number of times socket events are emitted (via the previous disconnected "ghost" username) each time the user clicks the "leave button" function and attempts to create a game
-  //     window.location.reload(false); // force refresh the page
-  //   });
-
-  //   // test
-  //   console.log(
-  //     "listening for user messages, game announcements, and if the user has left the room"
-  //   );
-  // });
+    // test
+    console.log("listening for messages");
+  }, []);
 
   return (
     <Container fluid="xl" className="container container--gameLobbyPage">
@@ -71,23 +41,21 @@ const Lobby = ({ user, setUser, clientRoom, setClientRoom, client }) => {
       <Row className="justify-content-between mb-4">
         <Col lg={3} className="d-flex flex-column justify-content-between">
           <ListGroup>
-            <RoomUsersDisplay usersInRoom={usersInRoom} maxUsersShown={5} />
+            {/* <RoomUsersDisplay usersInRoom={usersInRoom} maxUsersShown={5} /> */}
           </ListGroup>
         </Col>
         <Col lg={6}>
-          <DrawingBoard
+          {/* <DrawingBoard
             client={client}
             username={user.username}
             gameLobbyID={user.lobbyID}
-          />
+          /> */}
         </Col>
         <Col lg={3} className="chat-container-wrapper">
           <TextChat
-            client={client}
-            username={user.username}
-            gameLobbyID={user.lobbyID}
+            user={user}
+            clientRoom={clientRoom}
             messageList={messageList}
-            setMessageList={setMessageList}
             message={message}
             setMessage={setMessage}
           />

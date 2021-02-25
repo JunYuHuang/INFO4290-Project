@@ -1,15 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import { Form } from "react-bootstrap";
 
-const TextChat = ({
-  socket,
-  username,
-  gameLobbyID,
-  messageList,
-  setMessageList,
-  message,
-  setMessage,
-}) => {
+const TextChat = ({ user, clientRoom, messageList, message, setMessage }) => {
+  // bot variables
+  const BOT_ID = user.lobbyID;
+
   // refs
   const chatBoxContainerEnd = useRef(null);
 
@@ -22,31 +17,28 @@ const TextChat = ({
     chatBoxContainerEnd.current.scrollIntoView({ behavior: "smooth" });
   };
 
-  const messageSenderFormatter = (lobbyMessage) => {
-    // TODO: rework this to check userID (make App or this page to store userID)
-    // or make socket server require unique username strings
-    if (lobbyMessage.username === username) {
-      return `You (${username}): `;
-    } else if (lobbyMessage.username === "GMS Bot") {
+  const messageSenderFormatter = (messagePackage) => {
+    if (messagePackage.senderID === user.sessionID) {
+      return `You (${messagePackage.senderDisplayName}): `;
+    } else if (messagePackage.senderID === BOT_ID) {
       return "📢 ";
     } else {
-      return `${lobbyMessage.username}: `;
+      return `${messagePackage.senderDisplayName}: `;
     }
   };
 
-  const handleSendMessage = async (e) => {
+  const handleSendMessage = (e) => {
     e.preventDefault();
 
     // only send message if it's not blank
     if (message !== "") {
-      let messageContent = {
-        username: username,
-        messageString: message,
-        roomID: gameLobbyID,
+      let messagePackage = {
+        senderID: user.sessionID,
+        senderDisplayName: user.displayName,
+        messageText: message,
       };
 
-      await socket.emit("SEND_MESSAGE", messageContent);
-      setMessageList([...messageList, messageContent]);
+      clientRoom.send("SEND_MESSAGE", messagePackage);
       setMessage("");
     }
   };
@@ -54,7 +46,7 @@ const TextChat = ({
   return (
     <div className="bg-white border border-white rounded-lg">
       <ul className="chat-container">
-        {messageList.map((lobbyMessage, index) => {
+        {messageList.map((messagePackage, index) => {
           return (
             <li
               id={`Message#${index}`}
@@ -62,9 +54,9 @@ const TextChat = ({
               className="chat-container__message"
             >
               <span className="font-weight-bold">
-                {messageSenderFormatter(lobbyMessage)}
+                {messageSenderFormatter(messagePackage)}
               </span>
-              {lobbyMessage.messageString}
+              {messagePackage.messageText}
             </li>
           );
         })}

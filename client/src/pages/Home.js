@@ -16,11 +16,7 @@ const Home = ({ user, setUser, setClientRoom, client, faker }) => {
   const [modalVisibility, setModalVisibility] = useState(false);
 
   const generateRandomDisplayName = () => {
-    return faker
-      .fake(
-        "{{commerce.color}}-{{commerce.productAdjective}}-{{commerce.product}}"
-      )
-      .toLowerCase();
+    return faker.fake("{{commerce.color}}-{{commerce.product}}").toLowerCase();
   };
 
   const joinRoom = async () => {
