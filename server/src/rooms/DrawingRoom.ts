@@ -16,6 +16,8 @@ const DELETE_USER = "DELETE_USER";
 const USER_DELETED = "USER_DELETED";
 const SEND_DRAWING = "SEND_DRAWING";
 const DRAWING_SENT = "DRAWING_SENT";
+const CLEAR_DRAWING_BOARD = "CLEAR_DRAWING_BOARD";
+const DRAWING_BOARD_CLEARED = "DRAWING_BOARD_CLEARED";
 const GET_USERS_IN_ROOM = "GET_USERS_IN_ROOM";
 const USERS_IN_ROOM_UPDATED = "USERS_IN_ROOM_UPDATED";
 
@@ -23,10 +25,6 @@ const USERS_IN_ROOM_UPDATED = "USERS_IN_ROOM_UPDATED";
 const BOT_NAME = "Server Bot";
 
 export class DrawingRoom extends Room<DrawingRoomState> {
-  //
-  // CUSTOMER HELPER METHODS
-  //
-
   //
   // ROOM LIFECYCLE METHODS
   //
@@ -46,8 +44,31 @@ export class DrawingRoom extends Room<DrawingRoomState> {
       console.log(`Client "${client.sessionId}" (${senderDisplayName}) in the DrawingRoom "${this.roomId}" sent the chat message "${messageText}".`);
     });
     
-    // TODO: send new list of users to client
-    // code
+    // temp - forward drawing data to other clients
+    this.onMessage(SEND_DRAWING, (client, drawingData) => {
+      let {
+        color,
+        lineWidth,
+        startX,
+        startY,
+        endX,
+        endY,
+      } = drawingData;
+
+      this.broadcast(DRAWING_SENT, drawingData, { except: client });
+
+      console.log(`User "${client.sessionId}" (${this.state.getUser(client.sessionId).getDisplayName()}) drew a stroke with points (${startX}, ${startY}) and (${endX}, ${endY}) with a "${lineWidth}" sized brush of color "${color}" in the room "${this.roomId}".`);
+    });
+    
+
+    // temp - clear the drawing board
+    this.onMessage(CLEAR_DRAWING_BOARD, (client, message) => {
+      this.broadcast(DRAWING_BOARD_CLEARED, message, { except: client });
+
+      console.log(
+        `User "${client.sessionId}" (${this.state.getUser(client.sessionId).getDisplayName()}) cleared the drawing board in the room "${this.roomId}".`
+      );
+    });
   }
 
   onJoin (client: Client, options: any) {
@@ -68,7 +89,7 @@ export class DrawingRoom extends Room<DrawingRoomState> {
       };
       this.broadcast(MESSAGE_SENT, messagePackage);
 
-      // TODO: send new list of users to client
+      // send new list of users to client
       let updatedLobbyUsers = this.state.getAllUsers();
       this.broadcast(USERS_IN_ROOM_UPDATED, updatedLobbyUsers);
     });
@@ -88,7 +109,7 @@ export class DrawingRoom extends Room<DrawingRoomState> {
     // remove the player's info to the room state
     this.state.removeUser(client.sessionId);
 
-    // TODO: send new list of users to client
+    // send new list of users to client
     let updatedLobbyUsers = this.state.getAllUsers();
     this.broadcast(USERS_IN_ROOM_UPDATED, updatedLobbyUsers);
 

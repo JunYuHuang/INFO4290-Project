@@ -43,12 +43,7 @@ const Lobby = ({ user, setUser, clientRoom, setClientRoom, client }) => {
           <span className="text-primary">{user.lobbyID}</span>
         </h1>
       </Row>
-      <TopMenuBar
-        user={user}
-        setUser={setUser}
-        clientRoom={clientRoom}
-        client={client}
-      />
+      <TopMenuBar user={user} setUser={setUser} clientRoom={clientRoom} />
       <Row className="justify-content-between mb-4">
         <Col lg={3} className="d-flex flex-column justify-content-between">
           <ListGroup>
@@ -56,11 +51,7 @@ const Lobby = ({ user, setUser, clientRoom, setClientRoom, client }) => {
           </ListGroup>
         </Col>
         <Col lg={6}>
-          {/* <DrawingBoard
-            client={client}
-            username={user.username}
-            gameLobbyID={user.lobbyID}
-          /> */}
+          <DrawingBoard user={user} clientRoom={clientRoom} />
         </Col>
         <Col lg={3} className="chat-container-wrapper">
           <TextChat

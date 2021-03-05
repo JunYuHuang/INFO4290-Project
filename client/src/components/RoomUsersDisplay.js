@@ -39,8 +39,8 @@ const RoomUsersDisplay = ({ usersInRoom, maxUsersShown }) => {
                   <div className="font-weight-bold text-truncate">
                     {userInRoom.displayName}
                   </div>
-                  <div className="text-truncate">
-                    Points: {userInRoom.points}
+                  <div className="text-truncate text-end">
+                    {userInRoom.points} Points
                   </div>
                 </div>
               </div>

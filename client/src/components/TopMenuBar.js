@@ -1,7 +1,7 @@
 import { Row, Col, Button } from "react-bootstrap";
 import history from "../history";
 
-const TopMenuBar = ({ user, setUser, clientRoom, client }) => {
+const TopMenuBar = ({ user, setUser, clientRoom }) => {
   const handleLeaveButton = async () => {
     try {
       // leave a room
