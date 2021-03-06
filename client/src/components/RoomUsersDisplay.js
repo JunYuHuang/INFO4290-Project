@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { ListGroup } from "react-bootstrap";
 
-const RoomUsersDisplay = ({ usersInRoom, maxUsersShown }) => {
+const RoomUsersDisplay = ({ user, usersInRoom, maxUsersShown }) => {
   // helper functions
   const getShownUsersInRoom = () => {
     return usersInRoom.filter((userInRoom, index) => index < maxUsersShown);
@@ -37,7 +37,9 @@ const RoomUsersDisplay = ({ usersInRoom, maxUsersShown }) => {
                 {/* <div className="userCardRank">#1</div> */}
                 <div className="userCardNameAndPoints">
                   <div className="font-weight-bold text-truncate">
-                    {userInRoom.displayName}
+                    {userInRoom.sessionID === user.sessionID
+                      ? `You (${userInRoom.displayName})`
+                      : userInRoom.displayName}
                   </div>
                   <div className="text-truncate text-end">
                     {userInRoom.points} Points

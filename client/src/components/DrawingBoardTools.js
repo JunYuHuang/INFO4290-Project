@@ -44,7 +44,7 @@ const DrawingBoardTools = ({
           max="101"
           step="1"
           onChange={(e) => {
-            setBrushSize(e.target.value);
+            setBrushSize(Number(e.target.value));
           }}
           type="range"
           value={brushSize}

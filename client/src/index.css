@@ -38,6 +38,10 @@ code {
 
 /* game lobby page */
 
+.lobby-title {
+  font-weight: 600;
+}
+
 .roomUsersDisplayWrapper {
   display: none;
   overflow: hidden;
@@ -160,32 +164,6 @@ code {
   height: 38px !important;
   margin: 0 1rem !important;
 }
-
-/* .input--range--brush-size:hover {
-  cursor: pointer !important;
-}
-
-.input--range--brush-size:focus {
-  outline: none !important;
-}
-
-.input--range--brush-size::-webkit-slider-runnable-track,
-.input--range--brush-size::-moz-range-track {
-  height: 0.25rem !important;
-  cursor: pointer !important;
-  background-color: hsla(208, 7%, 46%, 0.3) !important;
-  border-radius: 0.1rem !important;
-  border: none !important;
-}
-
-.input--range--brush-size::-webkit-slider-thumb,
-.input--range--brush-size::-moz-range-thumb {
-  background-color: #6c757d !important;
-  height: 16px !important;
-  width: 48px !important;
-  border-radius: 1rem !important;
-  box-shadow: none !important;
-} */
 
 .button-container--drawing-tools {
   margin: 0 1rem;

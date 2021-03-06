@@ -38,7 +38,7 @@ const Lobby = ({ user, setUser, clientRoom, setClientRoom, client }) => {
   return (
     <Container fluid="xl" className="container container--gameLobbyPage">
       <Row className="d-flex flex-column">
-        <h1 className="col col-lg-12 mb-4 text-center">
+        <h1 className="col col-lg-12 mb-4 text-center lobby-title">
           Guess My Sketch - Lobby ID&nbsp;
           <span className="text-primary">{user.lobbyID}</span>
         </h1>
@@ -47,7 +47,11 @@ const Lobby = ({ user, setUser, clientRoom, setClientRoom, client }) => {
       <Row className="justify-content-between mb-4">
         <Col lg={3} className="d-flex flex-column justify-content-between">
           <ListGroup>
-            <RoomUsersDisplay usersInRoom={lobbyUsers} maxUsersShown={5} />
+            <RoomUsersDisplay
+              user={user}
+              usersInRoom={lobbyUsers}
+              maxUsersShown={5}
+            />
           </ListGroup>
         </Col>
         <Col lg={6}>

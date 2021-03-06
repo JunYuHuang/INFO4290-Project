@@ -44,25 +44,41 @@ export class DrawingRoom extends Room<DrawingRoomState> {
       console.log(`Client "${client.sessionId}" (${senderDisplayName}) in the DrawingRoom "${this.roomId}" sent the chat message "${messageText}".`);
     });
     
-    // temp - forward drawing data to other clients
-    this.onMessage(SEND_DRAWING, (client, drawingData) => {
-      let {
-        color,
-        lineWidth,
-        startX,
-        startY,
-        endX,
-        endY,
-      } = drawingData;
+    // forward drawing data to other clients
+    this.onMessage(SEND_DRAWING, (client, brushStrokeData) => {
 
-      this.broadcast(DRAWING_SENT, drawingData, { except: client });
+      brushStrokeData.forEach((brushStrokeDatum: any) => {
+        let {
+          drawerID,
+          color,
+          lineWidth,
+          startX,
+          startY,
+          endX,
+          endY,
+        } = brushStrokeDatum;
 
-      console.log(`User "${client.sessionId}" (${this.state.getUser(client.sessionId).getDisplayName()}) drew a stroke with points (${startX}, ${startY}) and (${endX}, ${endY}) with a "${lineWidth}" sized brush of color "${color}" in the room "${this.roomId}".`);
+        this.state.appendDrawingDatum(
+          drawerID,
+          color,
+          lineWidth,
+          startX,
+          startY,
+          endX,
+          endY
+        );
+      });
+
+      this.broadcast(DRAWING_SENT, this.state.getDrawingData(), { except: client });
+
+      console.log(`User "${client.sessionId}" (${this.state.getUser(client.sessionId).getDisplayName()}) sent some drawing data to the room "${this.roomId}".`)
     });
     
 
-    // temp - clear the drawing board
+    // clear the drawing board
     this.onMessage(CLEAR_DRAWING_BOARD, (client, message) => {
+      this.state.clearDrawingData();
+
       this.broadcast(DRAWING_BOARD_CLEARED, message, { except: client });
 
       console.log(
@@ -92,6 +108,9 @@ export class DrawingRoom extends Room<DrawingRoomState> {
       // send new list of users to client
       let updatedLobbyUsers = this.state.getAllUsers();
       this.broadcast(USERS_IN_ROOM_UPDATED, updatedLobbyUsers);
+
+      // send the current Canvas drawing to the client
+      client.send(DRAWING_SENT, this.state.getDrawingData());
     });
 
     console.log(`Client "${client.sessionId}" joined the DrawingRoom "${this.roomId}".`);

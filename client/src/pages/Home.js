@@ -82,7 +82,7 @@ const Home = ({ user, setUser, setClientRoom, client, faker }) => {
   return (
     <Container className="form-container form-container--homePage">
       <Form className="form form--homePage" onSubmit={handleSubmit}>
-        <h1 className="font-weight-hold text-center mb-4">Guess My Sketch</h1>
+        <h1 className="lobby-title text-center mb-4">Guess My Sketch</h1>
         <Form.Group controlId="formUsername">
           <Form.Label className="text-secondary">Your Name</Form.Label>
           <Form.Control
