@@ -1,4 +1,5 @@
 import { Room, Client } from "colyseus";
+import e from "express";
 import { DrawingRoomState } from "./schema/DrawingRoomState";
 
 //
@@ -89,13 +90,17 @@ export class DrawingRoom extends Room<DrawingRoomState> {
 
   onAuth(client: Client, options: any, request: any) {
     const session = request.session;
+
+    console.log(request.session);
     if (session.passport?.user != null)
       return {
-        isAuth: true
+        isAuth: true,
+        user: session.passport?.user
       }
 
     return {
-      isAuth: false
+      isAuth: false,
+      user: null
     };
   }
 
@@ -107,10 +112,12 @@ export class DrawingRoom extends Room<DrawingRoomState> {
     this.onMessage(ADD_USER, (client, userInfo) => {
       let { sessionID, displayName } = userInfo;
       // this.state.getUser(client.sessionId).setSessionID(sessionID);
-      this.state.getUser(client.sessionId).setDisplayName(displayName);
-      console.log(auth);
+
       if (auth.isAuth) {
         this.state.getUser(client.sessionId).setIsAuthenticated(true);
+        this.state.getUser(client.sessionId).setDisplayName(auth.user.username);
+      } else {
+        this.state.getUser(client.sessionId).setDisplayName(displayName);
       }
 
       // announce to all clients in the room that a player has joined

@@ -32,11 +32,14 @@ passport.use(
 );
 
 passport.serializeUser((user, cb) => {
-  cb(null, user.id);
+  cb(null, {
+    id: user.id,
+    username: user.username
+  });
 });
 
-passport.deserializeUser((id: number, cb) => {
-  users.findById(id, (err: Error, user: Express.User) => {
+passport.deserializeUser((user: any, cb) => {
+  users.findById(user.id, (err: Error, user: Express.User) => {
     if (err) {
       return cb(err);
     }

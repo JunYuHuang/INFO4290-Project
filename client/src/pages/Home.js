@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Container, Form, Button, Alert, Modal } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useAuth } from "../lib/auth";
@@ -22,6 +22,14 @@ const Home = ({ user, setUser, setClientRoom, client, faker }) => {
   const [authModalCallback, setAuthModalCallback] = useState(null);
   const [authModalVisibility, setAuthModalVisibility] = useState(false);
 
+  useEffect(() => {
+    if (auth.user) {
+      setUser({ ...user, displayName: auth.user.username });
+    } else {
+      setUser({ ...user, displayName: "" });
+    }
+  }, [auth.user]);
+
   const generateRandomDisplayName = () => {
     return faker.fake("{{commerce.color}}-{{commerce.product}}").toLowerCase();
   };
@@ -32,11 +40,14 @@ const Home = ({ user, setUser, setClientRoom, client, faker }) => {
       const room = await client.joinById(user.lobbyID);
       console.log(`Created and joined room "${room.id}" successfully.`);
 
+      console.log(auth.user);
       // save the local state
       if (user.displayName === "") {
         setUser({
           ...user,
-          displayName: generateRandomDisplayName(),
+          displayName: auth.user
+            ? auth.user.username
+            : generateRandomDisplayName(),
           sessionID: room.sessionId,
           lobbyID: room.id,
         });
@@ -66,7 +77,9 @@ const Home = ({ user, setUser, setClientRoom, client, faker }) => {
       if (user.displayName === "") {
         setUser({
           ...user,
-          displayName: generateRandomDisplayName(),
+          displayName: auth.user
+            ? auth.user.username
+            : generateRandomDisplayName(),
           sessionID: room.sessionId,
           lobbyID: room.id,
         });
@@ -115,6 +128,7 @@ const Home = ({ user, setUser, setClientRoom, client, faker }) => {
             type="text"
             placeholder="Enter your name"
             required
+            readOnly={auth.user ? true : false}
             value={user.displayName}
             onChange={(e) => setUser({ ...user, displayName: e.target.value })}
           />
