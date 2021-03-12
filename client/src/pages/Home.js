@@ -89,6 +89,7 @@ const Home = ({ user, setUser, setClientRoom, client, faker }) => {
   const setLoginModal = () => {
     setAuthModalCallback(() => async (username, password) => {
       await auth.login(username, password);
+      setAuthModalVisibility(false);
     });
     setAuthModalLabel("Login");
     setAuthModalVisibility(true);
@@ -97,6 +98,7 @@ const Home = ({ user, setUser, setClientRoom, client, faker }) => {
   const setSignupModal = () => {
     setAuthModalCallback(() => async (username, password) => {
       await auth.signup(username, password);
+      setAuthModalVisibility(false);
     });
     setAuthModalLabel("Sign Up");
     setAuthModalVisibility(true);
