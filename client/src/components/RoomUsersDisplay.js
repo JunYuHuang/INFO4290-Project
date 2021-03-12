@@ -19,6 +19,8 @@ const RoomUsersDisplay = ({ user, usersInRoom, maxUsersShown }) => {
     );
   };
 
+  console.log(usersInRoom);
+
   // complete commented out JSX elements in template when game logic is done (points, player ranking, current drawer)
 
   return (
@@ -35,7 +37,11 @@ const RoomUsersDisplay = ({ user, usersInRoom, maxUsersShown }) => {
             >
               <div className="d-flex flex-row">
                 {/* <div className="userCardRank">#1</div> */}
-                <div className="userCardNameAndPoints">
+                <div
+                  className={`userCardNameAndPoints ${
+                    userInRoom.isAuthenticated ? "authUser" : ""
+                  }`}
+                >
                   <div className="font-weight-bold text-truncate">
                     {userInRoom.sessionID === user.sessionID
                       ? `You (${userInRoom.displayName})`

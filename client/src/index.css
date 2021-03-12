@@ -42,6 +42,22 @@ code {
   font-weight: 600;
 }
 
+.lobby-auth-welcome {
+  font-weight: 500;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.auth-button-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+.auth-button {
+  flex: 1;
+}
+
 .roomUsersDisplayWrapper {
   display: none;
   overflow: hidden;
@@ -93,6 +109,10 @@ code {
 
 .userCardNameAndPoints > * {
   max-width: 130px;
+}
+
+.authUser {
+  color: green;
 }
 
 .chat-container-wrapper {

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Router, Switch, Route, Redirect } from "react-router-dom";
+import { AuthProvider } from "./lib/auth";
 import history from "./history";
 import Home from "./pages/Home";
 import Lobby from "./pages/Lobby";
@@ -24,34 +25,36 @@ const App = () => {
   const [clientRoom, setClientRoom] = useState({});
 
   return (
-    <Router history={history}>
-      <div className="react-app-container">
-        <Switch>
-          <Route path="/lobby">
-            {user.sessionID === "" ? (
-              <Redirect to="/" />
-            ) : (
-              <Lobby
+    <AuthProvider>
+      <Router history={history}>
+        <div className="react-app-container">
+          <Switch>
+            <Route path="/lobby">
+              {user.sessionID === "" ? (
+                <Redirect to="/" />
+              ) : (
+                <Lobby
+                  user={user}
+                  setUser={setUser}
+                  clientRoom={clientRoom}
+                  setClientRoom={setClientRoom}
+                  client={client}
+                />
+              )}
+            </Route>
+            <Route path="/">
+              <Home
                 user={user}
                 setUser={setUser}
-                clientRoom={clientRoom}
                 setClientRoom={setClientRoom}
                 client={client}
+                faker={faker}
               />
-            )}
-          </Route>
-          <Route path="/">
-            <Home
-              user={user}
-              setUser={setUser}
-              setClientRoom={setClientRoom}
-              client={client}
-              faker={faker}
-            />
-          </Route>
-        </Switch>
-      </div>
-    </Router>
+            </Route>
+          </Switch>
+        </div>
+      </Router>
+    </AuthProvider>
   );
 };
 

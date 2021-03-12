@@ -9,7 +9,10 @@ export class User extends Schema {
   @type("boolean")
   private isDrawer: boolean = false;
 
-  constructor() { 
+  @type("boolean")
+  private isAuthenticated: boolean = false;
+
+  constructor() {
     super();
   };
 
@@ -35,5 +38,13 @@ export class User extends Schema {
 
   setIsDrawer(isDrawer: boolean) {
     this.isDrawer = isDrawer;
+  }
+
+  getIsAuthenticated() {
+    return this.isAuthenticated;
+  }
+
+  setIsAuthenticated(isAuthenticated: boolean) {
+    this.isAuthenticated = isAuthenticated;
   }
 }

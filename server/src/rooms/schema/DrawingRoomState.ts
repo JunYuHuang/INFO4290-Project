@@ -1,6 +1,7 @@
 import { ArraySchema, MapSchema, Schema, type } from "@colyseus/schema";
 import { User } from "./User";
 import { DrawingDatum } from "./DrawingDatum";
+import { isAuthenticated } from "../../routes/auth";
 
 export class DrawingRoomState extends Schema {
   @type({ map: User })
@@ -24,7 +25,8 @@ export class DrawingRoomState extends Schema {
       sessionID: key,
       displayName: value.getDisplayName(),
       points: value.getPoints(),
-      isDrawer: value.getIsDrawer()
+      isDrawer: value.getIsDrawer(),
+      isAuthenticated: value.getIsAuthenticated()
     }));
 
     return usersArray;
@@ -33,7 +35,7 @@ export class DrawingRoomState extends Schema {
   removeUser(sessionID: string) {
     this.users.delete(sessionID);
   }
-  
+
   // DrawingDatum helper methods
 
   appendDrawingDatum(drawerID: string, color: string, lineWidth: number, startX: number, startY: number, endX: number, endY: number) {

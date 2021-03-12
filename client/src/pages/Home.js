@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Container, Form, Button, Alert, Modal } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
+import { useAuth } from "../lib/auth";
+import AuthModalShell from "../components/AuthModalShell";
 import history from "../history";
 
 const Home = ({ user, setUser, setClientRoom, client, faker }) => {
@@ -14,6 +16,11 @@ const Home = ({ user, setUser, setClientRoom, client, faker }) => {
   };
 
   const [modalVisibility, setModalVisibility] = useState(false);
+
+  const auth = useAuth();
+  const [authModalLabel, setAuthModalLabel] = useState("");
+  const [authModalCallback, setAuthModalCallback] = useState(null);
+  const [authModalVisibility, setAuthModalVisibility] = useState(false);
 
   const generateRandomDisplayName = () => {
     return faker.fake("{{commerce.color}}-{{commerce.product}}").toLowerCase();
@@ -77,6 +84,22 @@ const Home = ({ user, setUser, setClientRoom, client, faker }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+  };
+
+  const setLoginModal = () => {
+    setAuthModalCallback(() => async (username, password) => {
+      await auth.login(username, password);
+    });
+    setAuthModalLabel("Login");
+    setAuthModalVisibility(true);
+  };
+
+  const setSignupModal = () => {
+    setAuthModalCallback(() => async (username, password) => {
+      await auth.signup(username, password);
+    });
+    setAuthModalLabel("Sign Up");
+    setAuthModalVisibility(true);
   };
 
   return (
@@ -153,6 +176,46 @@ const Home = ({ user, setUser, setClientRoom, client, faker }) => {
           </Modal.Footer>
         </Modal>
         {/* modal */}
+        {auth.user && (
+          <>
+            <p className="lobby-auth-welcome text-center">
+              Welcome back, {auth.user.username}
+            </p>
+            <Button
+              variant="outline-danger"
+              className="btn-lg btn-block"
+              onClick={() => auth.signout()}
+            >
+              Sign Out
+            </Button>
+          </>
+        )}
+        {!auth.user && (
+          <div className="auth-button-wrapper">
+            <Button
+              className="auth-button"
+              variant="outline-primary"
+              onClick={() => setSignupModal(true)}
+            >
+              Sign Up
+            </Button>
+            <Button
+              className="auth-button ml-3"
+              variant="outline-primary"
+              onClick={() => setLoginModal(true)}
+            >
+              Login
+            </Button>
+          </div>
+        )}
+        <AuthModalShell
+          label={authModalLabel}
+          visible={authModalVisibility}
+          onSubmit={async (username, password) =>
+            await authModalCallback(username, password)
+          }
+          onCancel={() => setAuthModalVisibility(false)}
+        />
       </Form>
     </Container>
   );
