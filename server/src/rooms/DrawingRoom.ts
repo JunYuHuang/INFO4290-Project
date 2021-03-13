@@ -1,4 +1,5 @@
 import { Room, Client } from "colyseus";
+import e from "express";
 import { DrawingRoomState } from "./schema/DrawingRoomState";
 
 //
@@ -32,7 +33,7 @@ export class DrawingRoom extends Room<DrawingRoomState> {
   // this room supports only 16 clients connected
   maxClients = 16;
 
-  onCreate (options: any) {
+  onCreate(options: any) {
     // initialize state
     this.setState(new DrawingRoomState());
     console.log(`DrawingRoom "${this.roomId}" created!`);
@@ -43,7 +44,7 @@ export class DrawingRoom extends Room<DrawingRoomState> {
       this.broadcast(MESSAGE_SENT, messagePackage);
       console.log(`Client "${client.sessionId}" (${senderDisplayName}) in the DrawingRoom "${this.roomId}" sent the chat message "${messageText}".`);
     });
-    
+
     // forward drawing data to other clients
     this.onMessage(SEND_DRAWING, (client, brushStrokeData) => {
 
@@ -73,7 +74,7 @@ export class DrawingRoom extends Room<DrawingRoomState> {
 
       console.log(`User "${client.sessionId}" (${this.state.getUser(client.sessionId).getDisplayName()}) sent some drawing data to the room "${this.roomId}".`)
     });
-    
+
 
     // clear the drawing board
     this.onMessage(CLEAR_DRAWING_BOARD, (client, message) => {
@@ -87,7 +88,23 @@ export class DrawingRoom extends Room<DrawingRoomState> {
     });
   }
 
-  onJoin (client: Client, options: any) {
+  onAuth(client: Client, options: any, request: any) {
+    const session = request.session;
+
+    console.log(request.session);
+    if (session.passport?.user != null)
+      return {
+        isAuth: true,
+        user: session.passport?.user
+      }
+
+    return {
+      isAuth: false,
+      user: null
+    };
+  }
+
+  onJoin(client: Client, options: any, auth?: any) {
     // add the player to the room state
     this.state.addUser(client.sessionId);
 
@@ -95,7 +112,13 @@ export class DrawingRoom extends Room<DrawingRoomState> {
     this.onMessage(ADD_USER, (client, userInfo) => {
       let { sessionID, displayName } = userInfo;
       // this.state.getUser(client.sessionId).setSessionID(sessionID);
-      this.state.getUser(client.sessionId).setDisplayName(displayName);
+
+      if (auth.isAuth) {
+        this.state.getUser(client.sessionId).setIsAuthenticated(true);
+        this.state.getUser(client.sessionId).setDisplayName(auth.user.username);
+      } else {
+        this.state.getUser(client.sessionId).setDisplayName(displayName);
+      }
 
       // announce to all clients in the room that a player has joined
       let messagePackage = {
@@ -116,7 +139,7 @@ export class DrawingRoom extends Room<DrawingRoomState> {
     console.log(`Client "${client.sessionId}" joined the DrawingRoom "${this.roomId}".`);
   }
 
-  onLeave (client: Client, consented: boolean) {
+  onLeave(client: Client, consented: boolean) {
     // announce to all clients in the room that a player has left
     let messagePackage = {
       senderDisplayName: BOT_NAME,
