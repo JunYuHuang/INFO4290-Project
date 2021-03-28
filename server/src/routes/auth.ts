@@ -14,7 +14,6 @@ export const isAuthenticated = (req: Request, res: Response, next: Function) => 
 }
 
 router.post("/authenticate", (req, res) => {
-    console.log(req.user);
     if (req.user) {
         res.json({
             id: req.user.id,
@@ -54,8 +53,8 @@ router.post("/login", passport.authenticate("local"), (req, res) => {
 });
 
 router.post("/signout", (req, res) => {
+    console.log(`${req.user.username} has signed out.`);
     req.logout();
-    console.log("signed out");
     res.sendStatus(200).end();
 });
 
