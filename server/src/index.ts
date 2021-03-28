@@ -9,7 +9,6 @@ import { Strategy as LocalStrategy } from "passport-local";
 
 import { Server } from "colyseus";
 import { monitor } from "@colyseus/monitor";
-// import socialRoutes from "@colyseus/social/express"
 
 import users from "./models/users";
 import auth from "./routes/auth";
@@ -60,7 +59,7 @@ const sessionParser = session({
 })
 
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: true,
   methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
   credentials: true
 }));
@@ -84,14 +83,6 @@ const gameServer = new Server({
 
 // register your room handlers
 gameServer.define("drawingRoom", DrawingRoom);
-
-/**
- * Register @colyseus/social routes
- *
- * - uncomment if you want to use default authentication (https://docs.colyseus.io/server/authentication/)
- * - also uncomment the import statement
- */
-// app.use("/", socialRoutes);
 
 // register colyseus monitor AFTER registering your room handlers
 app.use("/colyseus", monitor());

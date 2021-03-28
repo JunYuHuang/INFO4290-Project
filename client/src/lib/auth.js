@@ -50,12 +50,14 @@ function useProvideAuth() {
   };
 
   const signout = async () => {
-    await axios.post("http://localhost:2567/signout").then((res) => {
-      if (res.status === 200) {
-        setUser(null);
-        cookie.remove("connect.sid");
-      }
-    });
+    await axios
+      .post("http://localhost:2567/signout", null, { withCredentials: true })
+      .then((res) => {
+        if (res.status === 200) {
+          setUser(null);
+          cookie.remove("connect.sid");
+        }
+      });
   };
 
   useEffect(() => {
