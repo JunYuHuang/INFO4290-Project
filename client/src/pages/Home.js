@@ -30,8 +30,21 @@ const Home = ({ user, setUser, setClientRoom, client, faker }) => {
     }
   }, [auth.user]);
 
+  const removeAllWhitespace = (text) => {
+    return text.replace(/\s/g, "");
+  };
+
+  const capitalizeText = (text) => {
+    return text.replace(/(^\w|\s\w)/g, (m) => m.toUpperCase());
+  };
+
   const generateRandomDisplayName = () => {
-    return faker.fake("{{commerce.color}}-{{commerce.product}}").toLowerCase();
+    let customName = faker.fake(
+      "{{commerce.color}}{{commerce.productMaterial}}"
+    );
+    // .toLowerCase();
+    customName = capitalizeText(removeAllWhitespace(customName));
+    return customName;
   };
 
   const joinRoom = async () => {
@@ -82,11 +95,18 @@ const Home = ({ user, setUser, setClientRoom, client, faker }) => {
             : generateRandomDisplayName(),
           sessionID: room.sessionId,
           lobbyID: room.id,
+          isRoomOwner: true,
         });
       } else {
-        setUser({ ...user, sessionID: room.sessionId, lobbyID: room.id });
+        setUser({
+          ...user,
+          sessionID: room.sessionId,
+          lobbyID: room.id,
+          isRoomOwner: true,
+        });
       }
       setClientRoom(room);
+      // setUser({ ...user, isRoomOwner: true });
 
       // redirect to Lobby
       history.push("/lobby");
@@ -121,6 +141,46 @@ const Home = ({ user, setUser, setClientRoom, client, faker }) => {
     <Container className="form-container form-container--homePage">
       <Form className="form form--homePage" onSubmit={handleSubmit}>
         <h1 className="lobby-title text-center mb-4">Guess My Sketch</h1>
+        {/* auth */}
+        {auth.user && (
+          <>
+            <div className="d-flex justify-content-between auth-profile-wrapper">
+              <p className="lobby-auth-welcome d-flex flex-column justify-content-center">
+                Hi, {auth.user.username}
+              </p>
+              <Button variant="outline-danger" onClick={() => auth.signout()}>
+                Log Out
+              </Button>
+            </div>
+          </>
+        )}
+        {!auth.user && (
+          <div className="auth-button-wrapper">
+            <Button
+              className="auth-button"
+              variant="outline-dark"
+              onClick={() => setSignupModal(true)}
+            >
+              Sign Up
+            </Button>
+            <Button
+              className="auth-button ml-3"
+              variant="outline-dark"
+              onClick={() => setLoginModal(true)}
+            >
+              Login
+            </Button>
+          </div>
+        )}
+        <AuthModalShell
+          label={authModalLabel}
+          visible={authModalVisibility}
+          onSubmit={async (username, password) =>
+            await authModalCallback(username, password)
+          }
+          onCancel={() => setAuthModalVisibility(false)}
+        />
+        {/* auth end */}
         <Form.Group controlId="formUsername">
           <Form.Label className="text-secondary">Your Name</Form.Label>
           <Form.Control
@@ -192,46 +252,6 @@ const Home = ({ user, setUser, setClientRoom, client, faker }) => {
           </Modal.Footer>
         </Modal>
         {/* modal */}
-        {auth.user && (
-          <>
-            <p className="lobby-auth-welcome text-center">
-              Welcome back, {auth.user.username}
-            </p>
-            <Button
-              variant="outline-danger"
-              className="btn-lg btn-block"
-              onClick={() => auth.signout()}
-            >
-              Sign Out
-            </Button>
-          </>
-        )}
-        {!auth.user && (
-          <div className="auth-button-wrapper">
-            <Button
-              className="auth-button"
-              variant="outline-primary"
-              onClick={() => setSignupModal(true)}
-            >
-              Sign Up
-            </Button>
-            <Button
-              className="auth-button ml-3"
-              variant="outline-primary"
-              onClick={() => setLoginModal(true)}
-            >
-              Login
-            </Button>
-          </div>
-        )}
-        <AuthModalShell
-          label={authModalLabel}
-          visible={authModalVisibility}
-          onSubmit={async (username, password) =>
-            await authModalCallback(username, password)
-          }
-          onCancel={() => setAuthModalVisibility(false)}
-        />
       </Form>
     </Container>
   );

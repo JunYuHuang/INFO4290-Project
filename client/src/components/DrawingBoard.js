@@ -50,22 +50,7 @@ const DrawingBoard = ({ user, clientRoom }) => {
 
     // listen for socket "DRAWING_SENT" events
     clientRoom.onMessage("DRAWING_SENT", (brushStrokeData) => {
-      // // scale the stroke depending on the user's canvas size
-      // let { startX, startY, endX, endY } = drawingData;
-      // let w = canvasRef.current.width;
-      // let h = canvasRef.current.height;
-
-      // updateDrawing(
-      //   {
-      // ...drawingData,
-      // startX: startX * w,
-      // startY: startY * h,
-      // endX: endX * w,
-      // endY: endY * h,
-      //   },
-      //   // false
-      // );
-
+      // scale the stroke depending on the user's canvas size
       let w = canvasRef.current.width;
       let h = canvasRef.current.height;
 
@@ -118,9 +103,6 @@ const DrawingBoard = ({ user, clientRoom }) => {
     contextRef.current.stroke();
     contextRef.current.closePath();
 
-    // prevents users from infinitely sending updates to server
-    // if (!shouldUpdateServer) return;
-
     // scale the stroke depending on the user's canvas size
     let w = canvasRef.current.width;
     let h = canvasRef.current.height;
@@ -138,14 +120,6 @@ const DrawingBoard = ({ user, clientRoom }) => {
         },
       ];
     });
-
-    // clientRoom.send("SEND_DRAWING", {
-    //   ...drawingData,
-    // startX: startX / w,
-    // startY: startY / h,
-    // endX: endX / w,
-    // endY: endY / h,
-    // });
   };
 
   const clearCanvas = (shouldUpdateServer) => {
@@ -166,66 +140,72 @@ const DrawingBoard = ({ user, clientRoom }) => {
   // event handlers
 
   const startDrawing = ({ nativeEvent }) => {
-    setIsDrawing(true);
-    // update the starting point of the stroke
-    const { offsetX, offsetY } = nativeEvent;
-    startPointRef.current.X = offsetX;
-    startPointRef.current.Y = offsetY;
+    if (user.isDrawer) {
+      setIsDrawing(true);
+      // update the starting point of the stroke
+      const { offsetX, offsetY } = nativeEvent;
+      startPointRef.current.X = offsetX;
+      startPointRef.current.Y = offsetY;
 
-    let drawingData = {
-      drawerID: user.sessionID,
-      color: brushColor,
-      lineWidth: brushSize,
-      startX: offsetX,
-      startY: offsetY,
-      endX: offsetX,
-      endY: offsetY,
-    };
+      let drawingData = {
+        drawerID: user.sessionID,
+        color: brushColor,
+        lineWidth: brushSize,
+        startX: offsetX,
+        startY: offsetY,
+        endX: offsetX,
+        endY: offsetY,
+      };
 
-    updateDrawing(drawingData);
+      updateDrawing(drawingData);
+    }
   };
 
   const finishDrawing = ({ nativeEvent }) => {
-    if (!isDrawing) return;
-    setIsDrawing(false);
+    if (user.isDrawer) {
+      if (!isDrawing) return;
+      setIsDrawing(false);
 
-    // update the starting point of the stroke
-    const { offsetX, offsetY } = nativeEvent;
-    let drawingData = {
-      drawerID: user.sessionID,
-      color: brushColor,
-      lineWidth: brushSize,
-      startX: startPointRef.current.X,
-      startY: startPointRef.current.Y,
-      endX: offsetX,
-      endY: offsetY,
-    };
-    // updateDrawing(drawingData, true);
-    updateDrawing(drawingData);
-    sendDrawingToServer();
-    setBrushStrokeData([]);
+      // update the starting point of the stroke
+      const { offsetX, offsetY } = nativeEvent;
+      let drawingData = {
+        drawerID: user.sessionID,
+        color: brushColor,
+        lineWidth: brushSize,
+        startX: startPointRef.current.X,
+        startY: startPointRef.current.Y,
+        endX: offsetX,
+        endY: offsetY,
+      };
+      // updateDrawing(drawingData, true);
+      updateDrawing(drawingData);
+      sendDrawingToServer();
+      setBrushStrokeData([]);
+    }
   };
 
   const draw = ({ nativeEvent }) => {
-    if (!isDrawing) return;
+    if (user.isDrawer) {
+      if (!isDrawing) return;
 
-    const { offsetX, offsetY } = nativeEvent;
+      const { offsetX, offsetY } = nativeEvent;
 
-    let drawingData = {
-      drawerID: user.sessionID,
-      color: brushColor,
-      lineWidth: brushSize,
-      startX: startPointRef.current.X,
-      startY: startPointRef.current.Y,
-      endX: offsetX,
-      endY: offsetY,
-    };
-    // updateDrawing(drawingData, true);
-    updateDrawing(drawingData);
+      let drawingData = {
+        drawerID: user.sessionID,
+        color: brushColor,
+        lineWidth: brushSize,
+        startX: startPointRef.current.X,
+        startY: startPointRef.current.Y,
+        endX: offsetX,
+        endY: offsetY,
+      };
+      // updateDrawing(drawingData, true);
+      updateDrawing(drawingData);
 
-    // set the new starting point
-    startPointRef.current.X = offsetX;
-    startPointRef.current.Y = offsetY;
+      // set the new starting point
+      startPointRef.current.X = offsetX;
+      startPointRef.current.Y = offsetY;
+    }
   };
 
   return (
@@ -247,13 +227,18 @@ const DrawingBoard = ({ user, clientRoom }) => {
       >
         <h1 className="text-center">Your browser doesn't support Canvas 😟</h1>
       </canvas>
-      <DrawingBoardTools
-        brushColor={brushColor}
-        setBrushColor={setBrushColor}
-        brushSize={brushSize}
-        setBrushSize={setBrushSize}
-        handleClearDrawingBoard={(e) => clearCanvas(true)}
-      />
+      {/* only show the drawing tools if the user is the drawer */}
+      {user.isDrawer ? (
+        <DrawingBoardTools
+          brushColor={brushColor}
+          setBrushColor={setBrushColor}
+          brushSize={brushSize}
+          setBrushSize={setBrushSize}
+          handleClearDrawingBoard={(e) => clearCanvas(true)}
+        />
+      ) : (
+        ""
+      )}
     </div>
   );
 };

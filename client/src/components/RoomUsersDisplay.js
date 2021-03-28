@@ -19,7 +19,13 @@ const RoomUsersDisplay = ({ user, usersInRoom, maxUsersShown }) => {
     );
   };
 
-  console.log(usersInRoom);
+  const displayDrawerIndicator = () => {
+    return (
+      <div className="current-drawer-indicator d-flex flex-column justify-content-start align-items-end">
+        <i className="las la-2x la-pen"></i>
+      </div>
+    );
+  };
 
   // complete commented out JSX elements in template when game logic is done (points, player ranking, current drawer)
 
@@ -33,7 +39,11 @@ const RoomUsersDisplay = ({ user, usersInRoom, maxUsersShown }) => {
           return (
             <ListGroup.Item
               key={index}
-              className="d-flex flex-row justify-content-between"
+              className={`d-flex flex-row justify-content-between userCard ${
+                userInRoom.sessionID === user.sessionID
+                  ? "userCard--isUser"
+                  : ""
+              }`}
             >
               <div className="d-flex flex-row">
                 {/* <div className="userCardRank">#1</div> */}
@@ -52,9 +62,7 @@ const RoomUsersDisplay = ({ user, usersInRoom, maxUsersShown }) => {
                   </div>
                 </div>
               </div>
-              {/* <div className="current-drawer-indicator d-flex flex-column justify-content-start align-items-end">
-                <i className="las la-2x la-pen"></i>
-              </div> */}
+              {userInRoom.isDrawer && displayDrawerIndicator()}
             </ListGroup.Item>
           );
         }

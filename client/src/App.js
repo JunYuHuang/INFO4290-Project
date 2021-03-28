@@ -16,10 +16,12 @@ const App = () => {
   const [user, setUser] = useState({
     sessionID: "",
     displayName: "",
-    authenticated: false,
-    lobbyID: "",
     points: 0,
     isDrawer: false,
+    isAuthenticated: false,
+    guessedRight: false,
+    isRoomOwner: false,
+    lobbyID: "",
   });
 
   const [clientRoom, setClientRoom] = useState({});
@@ -33,13 +35,7 @@ const App = () => {
               {user.sessionID === "" ? (
                 <Redirect to="/" />
               ) : (
-                <Lobby
-                  user={user}
-                  setUser={setUser}
-                  clientRoom={clientRoom}
-                  setClientRoom={setClientRoom}
-                  client={client}
-                />
+                <Lobby user={user} setUser={setUser} clientRoom={clientRoom} />
               )}
             </Route>
             <Route path="/">

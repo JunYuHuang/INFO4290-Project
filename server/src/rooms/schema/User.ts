@@ -1,6 +1,7 @@
 import { Schema, type } from "@colyseus/schema";
 
 export class User extends Schema {
+  @type("string")
   private displayName: string = "";
 
   @type("number")
@@ -11,6 +12,9 @@ export class User extends Schema {
 
   @type("boolean")
   private isAuthenticated: boolean = false;
+
+  @type("boolean")
+  private guessedRight: boolean = false;
 
   constructor() {
     super();
@@ -29,7 +33,11 @@ export class User extends Schema {
   }
 
   setPoints(points: number) {
-    return this.points;
+    this.points = points;
+  }
+
+  addPoints(points: number) {
+    this.points += points;
   }
 
   getIsDrawer() {
@@ -46,5 +54,13 @@ export class User extends Schema {
 
   setIsAuthenticated(isAuthenticated: boolean) {
     this.isAuthenticated = isAuthenticated;
+  }
+
+  getGuessedRight() {
+    return this.guessedRight;
+  }
+
+  setGuessedRight(guessedRight: boolean) {
+    this.guessedRight = guessedRight;
   }
 }

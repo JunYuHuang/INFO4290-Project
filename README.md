@@ -34,7 +34,7 @@ SVGs graphics from the [Ionicons icon library](https://ionicons.com/) were used.
 
 1. Right-click the `/INFO4290-Project/server` folder.
 2. Select the `Git Bash Here` option to open a Git Bash terminal there.
-3. Type `npm test` and hit `Enter` to start the Node.js Socket.IO server.
+3. Type `npm start` and hit `Enter` to start the Node.js Socket.IO server.
 4. Right-click the `/INFO4290-Project/client` folder.
 5. Select the `Git Bash Here` option to open a Git Bash terminal there.
 6. Type `npm start` and hit [Enter] to start the React client app.

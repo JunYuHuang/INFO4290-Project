@@ -44,18 +44,21 @@ code {
 
 .lobby-auth-welcome {
   font-weight: 500;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0;
+}
+
+.auth-profile-wrapper {
+  margin-bottom: 1rem;
 }
 
 .auth-button-wrapper {
   display: flex;
-  justify-content: space-between;
-  align-items: stretch;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
 }
 
 .auth-button {
-  flex: 1;
+  /* flex: 1; */
 }
 
 .roomUsersDisplayWrapper {
@@ -87,7 +90,8 @@ code {
 }
 
 .menuItem--timeLeft__numbers {
-  margin-left: 0.2rem;
+  /* margin-left: 0.2rem; */
+  margin-right: 0.2rem;
 }
 
 .menuItem--rounds,
@@ -109,6 +113,10 @@ code {
 
 .userCardNameAndPoints > * {
   max-width: 130px;
+}
+
+.userCard--isUser {
+  background-color: hsla(0, 16%, 87%, 0.3) !important;
 }
 
 .authUser {
