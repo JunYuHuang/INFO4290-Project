@@ -1,5 +1,6 @@
 require("dotenv").config();
 import http from "http";
+import path from "path";
 import express from "express";
 import cors from "cors";
 import session from "express-session";
@@ -71,6 +72,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/", auth);
+
+// for deployment
+app.use(express.static(path.join(__dirname, 'client/build')));
+app.get("/*", (req, res) => {
+  res.sendFile(path.join(__dirname + '/client/build/index.html'));
+});
 
 const server = http.createServer(app);
 const gameServer = new Server({
