@@ -19,7 +19,7 @@ function useProvideAuth() {
   const signup = async (username, password) => {
     await axios
       .post(
-        "http://localhost:2567/signup",
+        `${process.env.REACT_APP_HTTPS_SERVER_URL}/signup`,
         { username, password },
         {
           headers: {
@@ -35,7 +35,7 @@ function useProvideAuth() {
   const login = async (username, password) => {
     await axios
       .post(
-        "http://localhost:2567/login",
+        `${process.env.REACT_APP_HTTPS_SERVER_URL}/login`,
         { username, password },
         {
           headers: {
@@ -51,7 +51,9 @@ function useProvideAuth() {
 
   const signout = async () => {
     await axios
-      .post("http://localhost:2567/signout", null, { withCredentials: true })
+      .post(`${process.env.REACT_APP_HTTPS_SERVER_URL}/signout`, null, {
+        withCredentials: true,
+      })
       .then((res) => {
         if (res.status === 200) {
           setUser(null);
@@ -63,7 +65,7 @@ function useProvideAuth() {
   useEffect(() => {
     const authenticate = async () => {
       await axios
-        .post("http://localhost:2567/authenticate", null, {
+        .post(`${process.env.REACT_APP_HTTPS_SERVER_URL}/authenticate`, null, {
           withCredentials: true,
         })
         .then((res) => {
