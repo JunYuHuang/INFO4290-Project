@@ -5,10 +5,12 @@
   "description": "npm init template for bootstrapping an empty Colyseus project",
   "main": "lib/index.js",
   "scripts": {
-    "start": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "build:server": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "build:client": "cd client && npm install && npm run build",
+    "start": "npm run build:client && npm run build:server && node ./lib/index.js",
     "loadtest": "colyseus-loadtest loadtest/example.ts --room my_room --numClients 2",
     "test": "node ./lib/index.js",
-    "heroku-postbuild": "tsc && webpack && cd client && npm install && npm run build"
+    "heroku-postbuild": "npm run start"
   },
   "author": "Jun Huang, Wilson Wong",
   "license": "MIT",
