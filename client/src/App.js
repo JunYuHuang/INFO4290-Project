@@ -8,7 +8,7 @@ import * as Colyseus from "colyseus.js";
 const faker = require("faker");
 
 // connect to the game server
-const SOCKET_SERVER_URL = "ws://localhost:2567/";
+const SOCKET_SERVER_URL = process.env.REACT_APP_SERVER_URL;
 let client = new Colyseus.Client(SOCKET_SERVER_URL);
 
 const App = () => {
