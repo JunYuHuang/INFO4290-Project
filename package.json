@@ -5,7 +5,7 @@
   "description": "npm init template for bootstrapping an empty Colyseus project",
   "main": "lib/index.js",
   "scripts": {
-    "start": "ts-node ./src/index.ts",
+    "start": "node ./lib/index.js",
     "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "author": "Jun Huang, Wilson Wong",

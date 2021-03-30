@@ -7,6 +7,7 @@ Guess My Sketch is the course project for the class INFO 4290: Integration Proje
 This is an online, multiplayer web application made with
 
 - HTML
+- CSS
 - JavaScript
 - TypeScript
 - PostgreSQL
