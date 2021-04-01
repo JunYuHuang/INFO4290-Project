@@ -240,11 +240,8 @@ export class DrawingRoom extends Room<DrawingRoomState> {
       let turnInProgress = this.state.game.getTurnInProgress();
 
       if (senderIsDrawer && turnInProgress) {
-        brushStrokeData.forEach((brushStrokeDatum: any) => {
-          let { drawerID, color, lineWidth, startX, startY, endX, endY } = brushStrokeDatum;
-  
-          this.state.appendDrawingDatum(drawerID, color, lineWidth, startX, startY, endX, endY);
-        });
+        let { drawerID, color, lineWidth, startX, startY, endX, endY } = brushStrokeData;
+        this.state.appendDrawingDatum(drawerID, color, lineWidth, startX, startY, endX, endY);
   
         this.broadcast(DRAWING_SENT, this.state.getDrawingData(), { except: client });
   
