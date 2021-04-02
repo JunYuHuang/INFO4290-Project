@@ -199,12 +199,14 @@ const DrawingBoard = ({ user, clientRoom }) => {
         onMouseDown={startDrawing}
         onMouseUp={finishDrawing}
         onMouseOut={finishDrawing}
-        onMouseMove={throttle(draw, 10)}
+        onMouseMove={draw}
+        // throttle(draw, 10)
         // mobile support below
         onTouchStart={startDrawing}
         onTouchEnd={finishDrawing}
         onTouchCancel={finishDrawing}
-        onTouchMove={throttle(draw, 10)}
+        onTouchMove={draw}
+        // throttle(draw, 10)
       >
         <h1 className="text-center">Your browser doesn't support Canvas 😟</h1>
       </canvas>

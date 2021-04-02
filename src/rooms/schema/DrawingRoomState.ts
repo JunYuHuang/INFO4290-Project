@@ -148,7 +148,10 @@ export class DrawingRoomState extends Schema {
 
   cleanTurn() {
     // reset "isDrawer" property of last drawing user
-    this.getUser(this.game.getDrawerID()).setIsDrawer(false);
+    let lastDrawer = this.getUser(this.game.getDrawerID());
+    if (lastDrawer) {
+      lastDrawer.setIsDrawer(false);
+    }
 
     // clear previous drawerID
     this.game.setDrawerID("");

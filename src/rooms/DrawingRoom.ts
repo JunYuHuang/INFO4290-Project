@@ -394,9 +394,25 @@ export class DrawingRoom extends Room<DrawingRoomState> {
             });
             console.log("> Game is over!");
           }
+
+          // end turn if drawer left after turn timer started
+          let drawer = this.state.getUser(this.state.game.getDrawerID());
+
+          if (!drawer) {
+            // start another turn in the current round
+            // temp way of starting new turn
+            this.state.game.setTurnInProgress(false);
+            this.state.game.setTurnTimer(0);
+            this.state.game.setTurnInProgress(this.state.startTurn());
+          }
         } else if (currentTurnTime === 0 && this.state.game.getGameStarted()) {
-          // award points to the drawer
-          this.addPointsToDrawer(this.state.game.getDrawerID());
+          // award points to the drawer only if the drawer is still in the room
+          let drawerID = this.state.game.getDrawerID();
+          let drawer = this.state.getUser(drawerID);
+
+          if (drawer) {
+            this.addPointsToDrawer(drawerID);
+          }
 
           // turn ended
           this.state.game.setTurnInProgress(false);

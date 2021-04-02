@@ -7,7 +7,9 @@
   "scripts": {
     "start": "node ./lib/index.js",
     "heroku-postbuild": "cd client && npm install && npm run build",
-    "dev": "cd client && npm run build && cd .. && ts-node-dev --respawn --transpile-only src/index.ts"
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "build:client": "cd client && npm run build && cd ..",
+    "build:server": "tsc"
   },
   "author": "Jun Huang, Wilson Wong",
   "license": "MIT",
