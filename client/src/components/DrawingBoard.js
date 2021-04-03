@@ -39,6 +39,7 @@ const DrawingBoard = ({ user, clientRoom }) => {
 
     // listen for socket "DRAWING_SENT" events
     clientRoom.onMessage("DRAWING_SENT", (brushStrokeData) => {
+      clearCanvas(false);
       // scale the stroke depending on the user's canvas size
       let w = canvasRef.current.width;
       let h = canvasRef.current.height;
@@ -48,10 +49,10 @@ const DrawingBoard = ({ user, clientRoom }) => {
 
         updateDrawing({
           ...brushStrokeDatum,
-          startX: startX * w,
-          startY: startY * h,
-          endX: endX * w,
-          endY: endY * h,
+          startX: Math.round(startX * w),
+          startY: Math.round(startY * h),
+          endX: Math.round(endX * w),
+          endY: Math.round(endY * h),
         });
       });
     });
@@ -141,6 +142,7 @@ const DrawingBoard = ({ user, clientRoom }) => {
       };
 
       updateDrawing(drawingData);
+      sendDrawingToServer(drawingData);
     }
   };
 
@@ -199,14 +201,12 @@ const DrawingBoard = ({ user, clientRoom }) => {
         onMouseDown={startDrawing}
         onMouseUp={finishDrawing}
         onMouseOut={finishDrawing}
-        onMouseMove={draw}
-        // throttle(draw, 10)
+        onMouseMove={throttle(draw, 10)}
         // mobile support below
         onTouchStart={startDrawing}
         onTouchEnd={finishDrawing}
         onTouchCancel={finishDrawing}
-        onTouchMove={draw}
-        // throttle(draw, 10)
+        onTouchMove={throttle(draw, 10)}
       >
         <h1 className="text-center">Your browser doesn't support Canvas 😟</h1>
       </canvas>
