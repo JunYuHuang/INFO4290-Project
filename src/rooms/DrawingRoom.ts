@@ -12,6 +12,7 @@ const ADD_USER = "ADD_USER";
 const USER_ADDED = "USER_ADDED";
 const SEND_DRAWING = "SEND_DRAWING";
 const DRAWING_SENT = "DRAWING_SENT";
+const WHOLE_DRAWING_SENT = "WHOLE_DRAWING_SENT";
 const CLEAR_DRAWING_BOARD = "CLEAR_DRAWING_BOARD";
 const DRAWING_BOARD_CLEARED = "DRAWING_BOARD_CLEARED";
 const GET_USERS_IN_ROOM = "GET_USERS_IN_ROOM";
@@ -243,7 +244,8 @@ export class DrawingRoom extends Room<DrawingRoomState> {
         let { drawerID, color, lineWidth, startX, startY, endX, endY } = brushStrokeData;
         this.state.appendDrawingDatum(drawerID, color, lineWidth, startX, startY, endX, endY);
   
-        this.broadcast(DRAWING_SENT, this.state.getDrawingData(), { except: client });
+        // this.broadcast(DRAWING_SENT, this.state.getDrawingData(), { except: client });
+        this.broadcast(DRAWING_SENT, brushStrokeData, { except: client });
   
         console.log(`User "${client.sessionId}" (${this.state.getUser(client.sessionId).getDisplayName()}) sent some drawing data to the room "${this.roomId}".`);
       }
@@ -552,7 +554,8 @@ export class DrawingRoom extends Room<DrawingRoomState> {
       }
 
       // send the current Canvas drawing to the client
-      client.send(DRAWING_SENT, this.state.getDrawingData());
+      // client.send(DRAWING_SENT, this.state.getDrawingData());
+      client.send(WHOLE_DRAWING_SENT, this.state.getDrawingData());
     });
 
     console.log(`Client "${client.sessionId}" joined the DrawingRoom "${this.roomId}".`);

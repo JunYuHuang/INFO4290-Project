@@ -37,9 +37,10 @@ const DrawingBoard = ({ user, clientRoom }) => {
       Y: 0,
     };
 
-    // listen for socket "DRAWING_SENT" events
-    clientRoom.onMessage("DRAWING_SENT", (brushStrokeData) => {
+    // for joining a game in progress
+    clientRoom.onMessage("WHOLE_DRAWING_SENT", (brushStrokeData) => {
       clearCanvas(false);
+
       // scale the stroke depending on the user's canvas size
       let w = canvasRef.current.width;
       let h = canvasRef.current.height;
@@ -57,7 +58,23 @@ const DrawingBoard = ({ user, clientRoom }) => {
       });
     });
 
-    // listen for socket "DRAWING_BOARD_CLEARED" events
+    // for being in a room whose game is in progress
+    clientRoom.onMessage("DRAWING_SENT", (brushStrokeDatum) => {
+      // scale the stroke depending on the user's canvas size
+      let w = canvasRef.current.width;
+      let h = canvasRef.current.height;
+
+      let { startX, startY, endX, endY } = brushStrokeDatum;
+
+      updateDrawing({
+        ...brushStrokeDatum,
+        startX: Math.round(startX * w),
+        startY: Math.round(startY * h),
+        endX: Math.round(endX * w),
+        endY: Math.round(endY * h),
+      });
+    });
+
     clientRoom.onMessage("DRAWING_BOARD_CLEARED", () => {
       clearCanvas(false);
     });
