@@ -12,6 +12,7 @@ const ADD_USER = "ADD_USER";
 const USER_ADDED = "USER_ADDED";
 const SEND_DRAWING = "SEND_DRAWING";
 const DRAWING_SENT = "DRAWING_SENT";
+const WHOLE_DRAWING_SENT = "WHOLE_DRAWING_SENT";
 const CLEAR_DRAWING_BOARD = "CLEAR_DRAWING_BOARD";
 const DRAWING_BOARD_CLEARED = "DRAWING_BOARD_CLEARED";
 const GET_USERS_IN_ROOM = "GET_USERS_IN_ROOM";
@@ -240,13 +241,11 @@ export class DrawingRoom extends Room<DrawingRoomState> {
       let turnInProgress = this.state.game.getTurnInProgress();
 
       if (senderIsDrawer && turnInProgress) {
-        brushStrokeData.forEach((brushStrokeDatum: any) => {
-          let { drawerID, color, lineWidth, startX, startY, endX, endY } = brushStrokeDatum;
+        let { drawerID, color, lineWidth, startX, startY, endX, endY } = brushStrokeData;
+        this.state.appendDrawingDatum(drawerID, color, lineWidth, startX, startY, endX, endY);
   
-          this.state.appendDrawingDatum(drawerID, color, lineWidth, startX, startY, endX, endY);
-        });
-  
-        this.broadcast(DRAWING_SENT, this.state.getDrawingData(), { except: client });
+        // this.broadcast(DRAWING_SENT, this.state.getDrawingData(), { except: client });
+        this.broadcast(DRAWING_SENT, brushStrokeData, { except: client });
   
         console.log(`User "${client.sessionId}" (${this.state.getUser(client.sessionId).getDisplayName()}) sent some drawing data to the room "${this.roomId}".`);
       }
@@ -397,9 +396,25 @@ export class DrawingRoom extends Room<DrawingRoomState> {
             });
             console.log("> Game is over!");
           }
+
+          // end turn if drawer left after turn timer started
+          let drawer = this.state.getUser(this.state.game.getDrawerID());
+
+          if (!drawer) {
+            // start another turn in the current round
+            // temp way of starting new turn
+            this.state.game.setTurnInProgress(false);
+            this.state.game.setTurnTimer(0);
+            this.state.game.setTurnInProgress(this.state.startTurn());
+          }
         } else if (currentTurnTime === 0 && this.state.game.getGameStarted()) {
-          // award points to the drawer
-          this.addPointsToDrawer(this.state.game.getDrawerID());
+          // award points to the drawer only if the drawer is still in the room
+          let drawerID = this.state.game.getDrawerID();
+          let drawer = this.state.getUser(drawerID);
+
+          if (drawer) {
+            this.addPointsToDrawer(drawerID);
+          }
 
           // turn ended
           this.state.game.setTurnInProgress(false);
@@ -539,7 +554,8 @@ export class DrawingRoom extends Room<DrawingRoomState> {
       }
 
       // send the current Canvas drawing to the client
-      client.send(DRAWING_SENT, this.state.getDrawingData());
+      // client.send(DRAWING_SENT, this.state.getDrawingData());
+      client.send(WHOLE_DRAWING_SENT, this.state.getDrawingData());
     });
 
     console.log(`Client "${client.sessionId}" joined the DrawingRoom "${this.roomId}".`);

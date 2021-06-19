@@ -1,16 +1,18 @@
 {
   "private": true,
-  "name": "my-app",
+  "name": "guessmysketch-app",
   "version": "1.0.0",
   "description": "npm init template for bootstrapping an empty Colyseus project",
   "main": "lib/index.js",
   "scripts": {
-    "start": "ts-node-dev --respawn --transpile-only src/index.ts",
-    "loadtest": "colyseus-loadtest loadtest/example.ts --room my_room --numClients 2",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./lib/index.js",
+    "heroku-postbuild": "cd client && npm install && npm run build",
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "build:client": "cd client && npm run build && cd ..",
+    "build:server": "tsc"
   },
-  "author": "",
-  "license": "UNLICENSED",
+  "author": "Jun Huang, Wilson Wong",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/colyseus/create-colyseus/issues"
   },
@@ -24,9 +26,9 @@
     "@types/passport": "^1.0.6",
     "@types/passport-local": "^1.0.33",
     "nodemon": "^2.0.7",
-    "ts-node": "^8.1.0",
+    "ts-node": "^8.10.2",
     "ts-node-dev": "^1.0.0-pre.63",
-    "typescript": "^3.4.5"
+    "typescript": "^3.9.9"
   },
   "dependencies": {
     "@colyseus/monitor": "^0.14.0",
@@ -43,6 +45,12 @@
     "nanoid": "^3.1.20",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
-    "pg": "^8.5.1"
+    "pg": "^8.5.1",
+    "ts-node": "^8.10.2",
+    "ts-node-dev": "^1.0.0-pre.63",
+    "typescript": "^3.9.9"
+  },
+  "engines": {
+    "node": "14.x"
   }
 }

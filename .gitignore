@@ -3,10 +3,23 @@
 # client ignores
 /client/node_modules
 /client/.pnp
-/client.pnp.js
+/client/.pnp.js
 /client/coverage
 /client/build
+/client/.DS_Store
+/client/.env.local
+/client/.env.development.local
+/client/.env.test.local
+/client/.env.production.local
+/client/npm-debug.log*
+/client/yarn-debug.log*
+/client/yarn-error.log*
+/client/.gitignore
+/client/.env
 
 # server ignores
-/server/node_modules
-/server/.env
+/node_modules
+/*.env
+/.env
+npm-debug.log
+# /lib

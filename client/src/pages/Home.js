@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Container, Form, Button, Alert, Modal } from "react-bootstrap";
-import { LinkContainer } from "react-router-bootstrap";
 import { useAuth } from "../lib/auth";
 import AuthModalShell from "../components/AuthModalShell";
 import history from "../history";

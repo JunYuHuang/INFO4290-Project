@@ -12,7 +12,7 @@ declare global {
 }
 
 const createUser = (username: string, password: string, cb: Function) => {
-  bcrypt.hash(password, 10, (err, hash) => {
+  bcrypt.hash(password, 10, (err: any, hash: any) => {
     if (err) {
       return console.log(err);
     }
@@ -21,7 +21,7 @@ const createUser = (username: string, password: string, cb: Function) => {
       .then(() => {
         cb(true);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.log(err);
         cb(false);
       });
@@ -33,10 +33,10 @@ const findById = (id: number, cb: Function) => {
     db<Express.User>("users")
       .where("id", id)
       .first()
-      .then((user) => {
+      .then((user: any) => {
         return cb(null, user);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         return cb(err, null);
       });
   });
@@ -47,10 +47,10 @@ const findByUsername = (username: string, cb: Function) => {
     return db<Express.User>("users")
       .where("username", username)
       .first()
-      .then((user) => {
+      .then((user: any) => {
         return cb(null, user);
       })
-      .catch((err) => {
+      .catch((err: any) => {
         return cb(err, null);
       });
   });

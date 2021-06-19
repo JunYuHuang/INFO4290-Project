@@ -4,38 +4,52 @@
 
 Guess My Sketch is the course project for the class INFO 4290: Integration Project II.
 
-This is an online, multiplayer web application made with React, Node, and Colyseus.
+This is an online, multiplayer web application made with
 
-SVGs graphics from the [Ionicons icon library](https://ionicons.com/) were used.
+- HTML
+- CSS
+- JavaScript
+- TypeScript
+- PostgreSQL
+- React
+- Node
+- Express
+- Knex
+- Colyseus
 
-## Required Software to Install
+SVGs graphics from the [Ionicons icon library](https://ionicons.com/) were also used.
+
+## Prerequisite Software
 
 - [Node.js](https://nodejs.org/en/download/)
+- [PostgreSQL](https://www.postgresql.org/download/)
 - [Git Bash](https://git-scm.com/downloads)
-- [VS Code](https://code.visualstudio.com/Download)
-- [GitHub Desktop](https://desktop.github.com/)
 
-## Downloading the Project
+## Setting up the app (locally) the first time
 
-1. Right-click the destination folder of where you want to install the project.
-2. Select the `Git Bash Here` option to open a Git Bash terminal.
-3. In Git Bash, type `git clone https://github.com/JunYuHuang/INFO4290-Project.git` and hit `Enter` to download the project repository. Alternatively, use GitHub Desktop to download the repository.
+1. Create a .env file in the root directory.
+2. Set the following environment variables according to your local PostgreSQL database settings.
 
-## Installing the Project's dependencies
+`SESSION_SECRET=yourSessionString`
+`PORT=2567`
+`REACT_APP_WSS_SERVER_URL=wss://localhost`
+`REACT_APP_HTTP_SERVER_URL=https://localhost`
+`DATABASE_URL=postgres://yourUsername:yourPassword@localhost:5432/databaseName`
 
-1. Right-click the `/INFO4290-Project/server` folder.
-2. Select the `Git Bash Here` option to open a Git Bash terminal there.
-3. Type `npm install` and hit `Enter`.
-4. Right-click the `/INFO4290-Project/client` folder.
-5. Select the `Git Bash Here` option to open a Git Bash terminal there.
-6. Type `npm install` and hit `Enter`.
+## Installation (with Git Bash)
 
-## Running the Project
+1. Install server dependencies: `npm install`
+2. Install client dependencies: `cd client && npm install`
 
-1. Right-click the `/INFO4290-Project/server` folder.
-2. Select the `Git Bash Here` option to open a Git Bash terminal there.
-3. Type `npm start` and hit `Enter` to start the Node.js Socket.IO server.
-4. Right-click the `/INFO4290-Project/client` folder.
-5. Select the `Git Bash Here` option to open a Git Bash terminal there.
-6. Type `npm start` and hit [Enter] to start the React client app.
-7. Shortly after, the app should automatically open in a new tab or window of your default web browser at the URL `localhost:3000`.
+## Re-compiling the TypeScript Node server
+
+`tsc`
+
+## Re-compiling the React client
+
+1. `cd /INFO4290-Project/client`
+2. `npm run build`
+
+## Starting the application
+
+1. `npm start`
