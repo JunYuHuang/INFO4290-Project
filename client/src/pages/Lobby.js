@@ -83,8 +83,10 @@ const Lobby = ({ user, setUser, clientRoom }) => {
   return (
     <Container fluid="xl" className="container container--gameLobbyPage">
       <Row className="d-flex flex-column">
-        <h1 className="col col-lg-12 mb-4 text-center lobby-title">
-          Guess My Sketch - Lobby ID&nbsp;
+        {/* mb-4  */}
+        <h1 className="col col-lg-12 text-center lobby-title">
+          <span className="lobby-title--desktop">Guess My Sketch</span>
+          <span className="lobby-title--mobile">GMS</span> - Lobby ID&nbsp;
           <span className="text-primary">{user.lobbyID}</span>
         </h1>
       </Row>

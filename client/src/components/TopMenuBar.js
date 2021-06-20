@@ -86,7 +86,7 @@ const TopMenuBar = ({
       <Col lg={3}></Col>
       <Col
         lg={6}
-        className="d-flex flex-row justify-content-between align-items-center"
+        className="d-flex flex-row justify-content-between align-items-center topMenuBar__middleColumn"
       >
         <div className="menuItem menuItem--rounds">{displayRounds()}</div>
         <div className="menuItem menuItem--wordToGuess">
