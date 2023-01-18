@@ -1,6 +1,6 @@
 # INFO4290-Project: Guess My Sketch
 
-<!-- ![Guess My Sketch Splash Preview]() -->
+![Guess My Sketch Splash Preview](assets/guessmysketch-splash.png)
 
 Guess My Sketch is the course project for the class INFO 4290: Integration Project II.
 
